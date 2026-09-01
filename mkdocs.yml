@@ -1,8 +1,8 @@
 site_name: Cybersecurity Mastery Path
 site_description: A structured, module-wise cybersecurity training program — networking, cryptography, web security, incident response and pentesting methodology, entry level to master level.
-site_url: https://sigilipelli.github.io/cybersecurity-skillmastery/
-repo_url: https://github.com/SIGILIPELLI/cybersecurity-skillmastery
-repo_name: cybersecurity-skillmastery
+site_url: https://sigilipelli.github.io/cybersecurity-mastery-path/
+repo_url: https://github.com/SIGILIPELLI/cybersecurity-mastery-path
+repo_name: cybersecurity-mastery-path
 
 theme:
   name: material

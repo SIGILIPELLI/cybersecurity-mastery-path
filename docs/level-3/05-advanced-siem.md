@@ -132,6 +132,44 @@ In Elastic, use index lifecycle management (ILM) to age data from hot
 (fast, expensive) to warm/cold/frozen tiers as it ages, keeping recent
 detection searches fast while retaining older data for investigations.
 
+## How It Actually Works: how ATT&CK-aligned detections are actually engineered, and what makes a search fast at scale
+
+A MITRE ATT&CK-aligned detection isn't a single rule matching one indicator
+— it's engineered by first specifying the **data requirement** a technique
+leaves behind mechanically. Take T1055 (Process Injection): the technique's
+concrete OS-level footprint is a process calling `OpenProcess` on a *different*
+process's PID, followed by `VirtualAllocEx`/`WriteProcessMemory` into that
+remote process's address space, followed by execution there (`CreateRemoteThread`
+or equivalent). A detection engineer maps each of these to the specific
+telemetry source that records it — Sysmon Event ID 8 (CreateRemoteThread) and
+Event ID 10 (ProcessAccess) on Windows — then writes a correlation search
+that requires the *sequence*, not just the presence of any one event, because
+each individual API call has enormous legitimate use (debuggers, some
+antivirus engines, and legitimate inter-process communication all call these
+same APIs) and only the specific combination, in order, against a
+non-whitelisted parent-child process pair, is a meaningfully strong signal.
+This sequence-over-single-event requirement is exactly why detection
+engineering (Level 3's real skill) differs from simply subscribing to threat
+feeds: the rule is derived from *how the technique must work mechanically
+given the OS's own APIs*, not from any single sample's specific indicators
+from the Pyramid of Pain.
+
+**Search performance at scale** in a SIEM ultimately comes back to the same
+inverted-index principle from Level 2 Module 6, extended with **time-based
+index partitioning**: logs are stored in indices bucketed by ingest time
+(hourly or daily), so a query scoped to "last 24 hours" only has to open
+and scan the handful of indices covering that window — indices for older
+data are never touched, which is why time-range scoping is the single
+highest-leverage lever for query speed, far more than optimizing the
+search syntax itself. **Alert tuning** to reduce fatigue is mechanically a
+precision/recall trade-off on the same underlying detection logic: tightening
+a threshold (say, raising "failed logins" from 5 to 20 per 5 minutes) trades
+fewer true positives caught at the margin for far fewer false positives from
+normal noisy behavior (VPN reconnects, expired cached credentials retrying
+automatically) — there is no tuning that improves both simultaneously without
+adding a genuinely new, more specific signal (like combining the failed-login
+count with an ATT&CK-aligned follow-on event) to the correlation itself.
+
 ## 7. Checklist
 
 - [ ] Logs normalized to a common schema (CIM/ECS) at ingest

@@ -111,6 +111,44 @@ Outcome: New Sigma rule created for anomalous WMI use outside allowlist;
   ATT&CK T1047 coverage moved from "none" to "detected"
 ```
 
+## How It Actually Works: how baseline/anomaly hunting actually computes "normal," and why hunting finds what rules miss
+
+**Data-driven hunting** works by building a statistical model of normal
+behavior per entity (per host, per user, per process) and flagging
+*deviation*, rather than matching a known-bad pattern the way a SIEM
+correlation rule does. Concretely, for something like process-execution
+frequency, a hunter (or the tooling supporting the hunt) computes a
+baseline distribution — mean and standard deviation of "how many distinct
+child processes does `explorer.exe` normally spawn per hour, per host" over
+a trailing window — and flags observations several standard deviations
+outside that baseline as candidates. This is a fundamentally different
+detection mechanism than the signature/correlation approach from Level 2–3's
+SIEM modules: a correlation rule can only ever catch behavior someone
+already characterized as bad; an anomaly baseline catches *anything
+statistically unusual*, including techniques nobody has written a rule for
+yet, at the cost of needing a human analyst to judge whether a given
+anomaly is actually malicious rather than a false positive from a legitimate
+but rare event (a scheduled batch job, an admin's unusual-but-authorized
+session).
+
+This is the precise, mechanistic reason **hunting finds things alerting
+doesn't**: a correlation rule requires the "IF condition" to be specified
+*before* the attack happens; a hunt hypothesis (section 3) is formed *after*
+observing intelligence about a new technique (Level 3 Module 4's threat
+intel feeding directly into this), and is tested by an analyst manually
+querying historical data for the specific ATT&CK-mapped telemetry signature
+that technique would leave — meaning a hunt can retroactively find an
+intrusion that occurred *before* any rule existed to catch it, as long as
+the raw telemetry was retained (tying directly back to Level 2 Module 6's
+retention discussion: a hunt is only as good as how far back the index
+actually goes). **Kill-chain-based hunting** structures this further by
+hypothesizing at each of the seven classic stages (reconnaissance through
+actions-on-objective) independently, because a technique's telemetry
+footprint and the baseline of "normal" both differ enormously stage to
+stage — DNS query volume anomalies matter for command-and-control hunting
+in a way they're irrelevant for a privilege-escalation hunt, which looks
+instead at token/permission-change telemetry.
+
 ## 8. Checklist
 
 - [ ] Hunts are hypothesis-driven and mapped to specific ATT&CK techniques

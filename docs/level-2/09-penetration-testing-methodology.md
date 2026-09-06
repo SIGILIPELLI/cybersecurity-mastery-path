@@ -146,6 +146,50 @@ msfconsole -x "use exploit/unix/ftp/vsftpd_234_backdoor; set RHOSTS 192.168.56.1
 If remediation was "patched vsftpd to a fixed version," this should now
 fail — confirming closure rather than assuming it.
 
+## How It Actually Works: why exploitation and post-exploitation measure impact rather than "winning," at the mechanism level
+
+Every phase of PTES maps to a specific technical operation, and the reason
+professional methodology insists on strict ordering is that each phase's
+output is the next phase's required input — you cannot exploit a service you
+haven't enumerated, and you cannot report severity you haven't measured.
+
+**Scanning and enumeration** (Phase 3) builds on the fingerprinting
+mechanism from Module 5 (Level 2), but adds **banner grabbing** and
+**version-specific enumeration** — for example, actively querying an SMB
+service for its supported dialects and signing configuration, because
+whether SMB signing is enforced is itself the deciding factor for whether an
+entire class of relay attacks is even theoretically possible against that
+host, independent of any specific CVE.
+
+**Exploitation** (Phase 4), from a defensive-education standpoint, is best
+understood not as "running a tool" but as **triggering a specific violation
+of a memory-safety or logic invariant** that the target software's
+developers didn't anticipate — a buffer overflow overwrites adjacent memory
+because a length check was missing or miscalculated; a deserialization
+exploit works because the deserializer reconstructs arbitrary object types
+from untrusted bytes, including types with dangerous side effects in their
+constructors. What a professional pentest measures here is not "did a shell
+pop" but **exploitability under real-world constraints** (is this reachable
+without internal credentials, does it require unusual configuration) — which
+is why a "critical" CVSS score can be downgraded in a pentest report if the
+assessor demonstrates the actual precondition isn't met in this specific
+environment, and conversely why a "medium" finding can be escalated if
+chaining it with a second, independently low-severity issue produces a
+critical outcome (an **attack chain** — the reporting concept that CVSS
+scoring, being per-vulnerability, structurally cannot capture on its own).
+
+**Post-exploitation** (Phase 5) exists because initial access is rarely the
+actual business risk — the real question is blast radius, which is measured
+mechanically by attempting **lateral movement** (can this foothold reach
+other systems, using the same trust-boundary logic from Module 1's threat
+modeling) and **privilege escalation** (can this low-privilege foothold reach
+a higher-trust context, exploiting the same kind of missing boundary check
+covered in Level 1 Module 3's OS security). Reporting severity, in a rigorous
+methodology, is therefore a function of *demonstrated reachability of
+business impact* through this chain — not the CVSS score of the single entry
+point — which is the concrete, mechanism-level reason two pentests against
+the same CVE can report wildly different real-world risk.
+
 ## Key terms
 
 | Term | Meaning |

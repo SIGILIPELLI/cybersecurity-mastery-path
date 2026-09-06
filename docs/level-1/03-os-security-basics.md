@@ -158,6 +158,54 @@ Benchmarks covers in far more depth — this list is the 80/20 version you'll
 actually apply on your own lab machine in Module 8 and audit in Module 10's
 project.
 
+## How It Actually Works: how the kernel actually enforces permissions
+
+Every time a process calls `open()`, `read()`, or `write()` on Linux, that
+call traps into the kernel, which runs a permission check before it ever
+touches the filesystem driver. For a regular file, the check walks the
+inode's mode bits against the calling process's **effective UID/GID**:
+
+```
+if (uid == inode.owner_uid)      check owner rwx bits
+else if (gid in process.groups)  check group rwx bits
+else                              check "other" rwx bits
+```
+
+This is enforced entirely in kernel space — a user-space program cannot
+"convince" the kernel it has a different UID; the UID lives in the process's
+`task_struct` and is only changed by kernel-mediated syscalls like `setuid()`,
+themselves gated by capability checks (`CAP_SETUID`). This is also why a
+**SUID bit** is powerful and dangerous: when set on an executable, the
+kernel temporarily sets the running process's effective UID to the file
+owner's UID (often root) for the duration of execution, regardless of who
+launched it — the mechanism legitimate tools like `passwd` rely on to let
+any user edit a root-owned file through a narrow, audited code path, and
+exactly the mechanism attackers hunt for in misconfigured SUID binaries that
+skip proper input validation.
+
+Windows enforces access differently but on the same principle: every
+securable object (file, registry key, process) carries a **Security
+Descriptor** containing a **DACL** (Discretionary Access Control List) — an
+ordered list of Access Control Entries, each naming a SID (Security
+Identifier) and an allow/deny permission mask. When a process tries to open
+an object, the kernel's Security Reference Monitor compares the requesting
+token's SIDs against the DACL **in order**, stopping at the first matching
+entry — which is why an explicit Deny ACE placed before an Allow ACE always
+wins, even if the Allow looks more specific. **UAC** layers on top of this:
+an administrator's logon actually creates two tokens, a full-privilege one
+and a filtered "standard user" one with admin SIDs marked deny-only: normal
+processes get the filtered token by default, and only an explicit elevation
+prompt swaps in the full token for that one process — least privilege
+enforced structurally, not just by policy.
+
+**Patch management** matters at this same layer because most memory-safety
+CVEs (buffer overflows, use-after-free) are exploited by corrupting kernel or
+process memory to hijack a return address or function pointer — a patch
+typically adds a bounds check or reorders a free so the corrupted-memory
+window no longer exists, which is why an unpatched but otherwise
+well-configured system can still be fully compromised by a single
+network-reachable input.
+
 ## Key terms
 
 | Term | Meaning |

@@ -103,6 +103,41 @@ design would. Good architecture explicitly documents trade-offs made and
 why, so future reviewers understand the reasoning rather than
 second-guessing a decision made with context they don't have.
 
+## How It Actually Works: how a threat model actually derives architectural controls from a data-flow diagram
+
+Architectural threat modeling produces controls, not just a document,
+through a mechanical process rather than intuition. It starts by drawing a
+**data flow diagram**: every process (a service), every data store
+(a database, a queue), every external entity (a user, a third-party API),
+and every flow between them, with **trust boundaries** drawn wherever a flow
+crosses from one privilege/ownership context into another (the same
+trust-boundary concept from Level 1 Module 1, now applied at system scale).
+The mechanical step is then walking every element against STRIDE
+systematically: for each *data flow crossing a trust boundary*, ask
+Spoofing (can the receiver be sure who sent this?), Tampering (can the data
+be modified in transit or at rest without detection?), and so on for all six
+categories — and for each "yes," the diagram directly names the missing
+control category (authentication for Spoofing, integrity checking/HMAC for
+Tampering, encryption for Information Disclosure). This is why threat
+modeling done properly on the three-tier example above is reproducible
+across analysts: two people modeling the same diagram converge on largely
+the same control set, because the method is a structured walk of a finite
+graph, not free-form speculation.
+
+**Balancing security against usability and cost** has a real quantitative
+framing underneath the qualitative discussion: for any proposed control, the
+architecture review should estimate **annualized loss expectancy (ALE)** —
+`Single Loss Expectancy × Annual Rate of Occurrence` — for the risk the
+control mitigates, and compare it against the control's own annualized cost
+(license, engineering time, ongoing friction measured in lost productivity
+or user attrition). A control whose cost exceeds the ALE it prevents is a
+net negative investment even though it "improves security" in isolation —
+this is the same Risk ≈ Threat × Vulnerability × Impact model from Level 1
+Module 1, now applied on the *defender's* side of the ledger to decide which
+of many technically valid controls actually belong in a given architecture,
+which is the concrete reason "add every control" is not simply the
+maximally secure choice organizations can afford to make.
+
 ## 8. Checklist
 
 - [ ] Defense-in-depth layers explicitly documented for critical systems

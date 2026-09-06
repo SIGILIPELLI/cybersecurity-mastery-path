@@ -144,6 +144,56 @@ configuration instead of OS settings.
 - [ ] CloudTrail (or equivalent) enabled account-wide, logs shipped off-account
 - [ ] Access keys rotated regularly; long-lived keys avoided in favor of roles
 
+## How It Actually Works: how IAM policy evaluation actually decides allow/deny, and how a "public" bucket becomes public
+
+Cloud IAM systems (AWS IAM is the canonical example) evaluate every API call
+against **every** policy attached to the caller — identity-based policies on
+the user/role, resource-based policies on the target object, permission
+boundaries, and service control policies at the organization level — and
+combine them with a specific, deterministic precedence:
+
+```
+1. Start with an implicit DENY (default-deny: nothing is allowed unless
+   something explicitly grants it)
+2. If ANY applicable statement is an explicit DENY → final result is DENY,
+   full stop, evaluation ends immediately
+3. Otherwise, if ANY applicable statement is an explicit ALLOW → ALLOW
+4. Otherwise → implicit DENY (nothing matched)
+```
+
+The critical, frequently-misunderstood consequence is step 2: an explicit
+`Deny` anywhere in the union of applicable policies overrides *every* other
+`Allow`, regardless of how specific or how recently attached that `Allow`
+is — there is no "most specific rule wins" tie-break like some firewall
+systems use; deny is absolute. This is exactly why permission boundaries
+work as a safety net: attaching a boundary that denies everything except an
+explicit list caps what any identity-based policy can grant, no matter how
+permissive someone later makes that identity's own policy.
+
+A storage bucket becomes "public" through the same evaluation, applied to a
+**resource-based policy** instead of an identity: a bucket policy or ACL
+that grants `s3:GetObject` to principal `"*"` (meaning "any AWS principal,
+authenticated or not") passes step 3 for literally anyone who requests it,
+because the policy engine has no way to distinguish "the whole internet" from
+"a specific role" once the principal field is a wildcard — `*` is not a
+special "restricted" value to the evaluator, it's just a principal value
+that happens to match every request. This is why automated cloud posture
+tools work by statically enumerating every resource policy and flagging any
+statement whose `Principal` or `Condition` fields resolve to an unrestricted
+set — they're running the same allow/deny evaluation algorithm offline,
+against every possible caller, rather than waiting to see if an actual
+unauthorized request happens.
+
+**Encryption at rest** in most cloud platforms uses **envelope encryption**:
+your data is encrypted with a randomly generated **data key**, and that data
+key itself is encrypted with a separate, centrally managed **customer master
+key (CMK)** that never leaves the cloud provider's key management service.
+This two-layer structure exists so that revoking or rotating the CMK
+re-secures every object without re-encrypting the (potentially petabyte-scale)
+data itself — only the much smaller encrypted data keys need to be
+re-wrapped, which is the entire reason "rotate keys" is operationally cheap
+at cloud scale.
+
 ## Key terms
 
 | Term | Meaning |

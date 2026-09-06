@@ -169,6 +169,45 @@ sudo lynis audit system
 Lynis produces a scored report with specific, actionable findings —
 run it before and after hardening to measure your progress.
 
+## How It Actually Works: how AppArmor/SELinux enforce beyond Unix permissions, and what `sysctl` hardening actually changes in the kernel
+
+Standard Unix permissions (Module 3) are **discretionary** — the file's
+owner decides who else can access it, and once a process runs as root, it
+can read/write anything regardless of any file's mode bits, because root
+bypasses the permission check entirely in the kernel's `capable()` logic.
+**Mandatory Access Control** (AppArmor, SELinux) closes exactly this gap by
+adding a second, independent check that even root cannot bypass by default.
+AppArmor works by loading a **profile** per binary — a whitelist of exact
+filesystem paths, capabilities, and network operations that binary is
+allowed to perform, enforced via Linux Security Module (LSM) hooks that the
+kernel calls at every relevant syscall (`open`, `exec`, `connect`) *before*
+the normal permission check even runs. A profile entry like
+`/etc/shadow r,` grants read-only access to that one path; anything not
+explicitly listed is denied, so a compromised `nginx` process running as
+root still cannot read `/etc/shadow` if the nginx profile never mentions it
+— the compromise is contained by policy the attacker's root shell has no
+authority to alter, because policy enforcement happens in the kernel LSM
+hook chain, a layer beneath any user-space privilege the exploited process
+holds. SELinux does the same job with a richer model (type enforcement:
+every process and object gets a security *type*, and policy defines which
+type-pairs are allowed to interact) but the enforcement point is identical —
+an LSM hook that runs regardless of the calling process's UID.
+
+`sysctl` hardening changes runtime parameters read directly by kernel
+networking code on every packet. `net.ipv4.tcp_syncookies = 1` turns on the
+SYN-cookie defense described in Module 2 at the exact point the kernel's TCP
+stack would otherwise allocate a connection control block.
+`net.ipv4.conf.all.rp_filter = 1` enables **reverse path filtering**: for
+every incoming packet, the kernel checks whether a route back to the
+packet's *source* IP would actually egress through the *same* interface the
+packet arrived on — if not, the packet is dropped, because a legitimately
+routed packet's reply path should be symmetric, and asymmetry is the
+signature of a spoofed source address used in reflection/amplification
+attacks. These aren't application-level filters; they're single-bit switches
+that change branches inside the kernel's already-compiled network stack, which
+is why they take effect instantly with zero performance cost for the
+non-attack case — the extra check was already cheap enough to always run.
+
 ## Key terms
 
 | Term | Meaning |

@@ -142,6 +142,59 @@ concrete design rule for any access-control system you build or audit:
     turn up exactly this pattern, and it's precisely the kind of finding
     you'll be looking for in Module 10's home lab assessment.
 
+## How It Actually Works: how a password hash actually resists cracking, and how TOTP codes are generated
+
+A password is never stored — what's stored is `hash(password + salt)`, and
+each part of that formula defends against a specific attack. The **salt** (a
+random value stored alongside the hash) exists because without it, two users
+with the same password produce identical hashes, and an attacker can
+precompute a **rainbow table** — a giant lookup of `hash → plaintext` — once
+and reuse it against every account in every breached database it ever
+targets. A unique salt per user forces the attacker to redo the work for
+every single hash, turning one lookup into millions of individual cracking
+attempts.
+
+Modern password hashing also intentionally makes the hash *slow*, which is
+the opposite of what you want from SHA-256 (built for speed). Algorithms
+like **bcrypt** and **Argon2** run a deliberately expensive internal loop —
+bcrypt performs a configurable number of Blowfish key-schedule rounds
+(the "cost factor," typically 2^12), and Argon2 additionally forces the
+computation to touch a large, configurable block of memory rather than pure
+CPU cycles. That memory requirement specifically defeats GPUs and ASICs,
+which are cracking-fast for cheap arithmetic but have comparatively little
+fast memory per parallel core — so Argon2 narrows the gap between an
+attacker's cracking rig and a legitimate login server's single hash
+verification, rather than letting the attacker parallelize a billion cheap
+hashes per second.
+
+**TOTP** (Time-based One-Time Password — the six-digit code in an
+authenticator app) is a second, independent factor built on HMAC:
+
+```
+counter      = floor(current_unix_time / 30)
+HMAC_output  = HMAC-SHA1(shared_secret, counter)
+code         = last 31 bits of HMAC_output, truncated & mod 10^6
+```
+
+Both the app and the server independently compute this from the same shared
+secret (exchanged once, at enrollment, via the QR code) and the same current
+time — no network round-trip is needed, which is why TOTP works offline.
+This is also exactly why authenticator app clocks must stay roughly
+synchronized with the server (most implementations tolerate ±1 time step):
+if the clocks drift too far apart, the counter values diverge and every code
+fails, and it's why "time drift" is a real support issue for TOTP
+deployments.
+
+**RBAC vs. ABAC under the hood**: a role-based system evaluates access as a
+simple set-membership check (`user.roles ∩ resource.required_roles ≠ ∅`),
+resolved once at login and cached in the session — fast, but coarse.
+Attribute-based access control evaluates a policy expression against
+live attributes at request time (`user.department == resource.owner_department
+AND time.hour BETWEEN 9 AND 18`), which requires re-evaluating the policy on
+every request rather than once per session — more precise, at the cost of
+being slower and harder to audit, which is the real engineering trade-off
+behind "why doesn't everyone just use ABAC everywhere."
+
 ## Key terms
 
 | Term | Meaning |

@@ -117,6 +117,42 @@ This is the business case that gets SOAR investment approved — expressed
 in analyst-hours reclaimed for higher-value work like threat hunting
 (Module 2), not just "faster response."
 
+## How It Actually Works: how a SOAR playbook actually executes across disconnected tools, and why automation has a hard ceiling
+
+A SOAR platform's core mechanism is a **workflow engine** orchestrating calls
+to each tool's own API, using a shared **case object** as the single source
+of state that every step reads from and writes to. Concretely, a phishing
+triage playbook executes as a directed graph of steps: an email-security
+API call extracts the suspicious URL/attachment → that artifact is submitted
+to a sandbox API (the same dynamic-analysis mechanism from Level 3 Module 3,
+invoked programmatically instead of by an analyst) → the sandbox's verdict
+is written back onto the case object as a new field → a **conditional
+branch** in the playbook reads that field and routes to either
+"auto-remediate" (call the mail platform's API to purge the message
+org-wide, call the identity provider's API to force a password reset on
+the reporting user) or "escalate to human," entirely based on that one
+value. This is why playbook design is fundamentally an integration problem,
+not an AI problem: each step is a deterministic API call with a defined
+input/output contract, and the "intelligence" is just the branching logic a
+human encoded ahead of time, applied instantly and identically every time
+the trigger conditions repeat.
+
+The **hard ceiling on automation** is a direct consequence of this
+determinism: a playbook can only branch on conditions its author
+anticipated and encoded, so it handles the *distribution* of cases that
+looks like previously-seen patterns extremely well (and does so far faster
+and more consistently than a human triaging the same repetitive case by
+hand), but it structurally cannot make a judgment call about a case shape
+nobody wrote a branch for — it will either fail closed (escalate everything
+unrecognized to a human, safe but adds no efficiency for that case) or, if
+built carelessly with an overly broad default branch, silently take the
+wrong automated action on a case that superficially matched the trigger but
+differed in some way the playbook's conditions didn't check for. This is
+the concrete, mechanism-level version of "automation helps most with
+high-volume repetitive triage and least with judgment calls" — it's a
+description of what a deterministic branching graph can and cannot encode,
+not a general limitation on how "smart" the tooling is allowed to be.
+
 ## 8. Checklist
 
 - [ ] Highest-volume, most repetitive alert type automated first

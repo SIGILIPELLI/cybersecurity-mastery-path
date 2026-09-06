@@ -114,6 +114,45 @@ Vendors selling "zero trust in a box" are selling one component — real
 zero trust is an architectural commitment (Module 1) spanning identity,
 network, device, application, and data controls together.
 
+## How It Actually Works: how a PDP/PEP actually evaluates "never trust, always verify" on every request
+
+The often-repeated zero trust slogan translates into one concrete
+architectural pattern: no request reaches a protected resource without
+first passing through a **Policy Enforcement Point (PEP)** that synchronously
+calls a **Policy Decision Point (PDP)** for a per-request authorization
+decision, evaluated fresh every time rather than cached from a login event.
+Mechanically, this differs from classic perimeter security in exactly one
+structural way: a traditional VPN performs authentication *once*, at
+connection time, and the network then implicitly trusts everything that
+connection subsequently does; a zero trust PEP intercepts *every individual
+request* (often literally as a sidecar proxy sitting in front of each
+service) and re-runs a policy evaluation — the same allow/deny model from
+Level 2 Module 8's IAM, but evaluated against live signals: current device
+posture, current network location, current session risk score, current time
+— rather than a single decision made minutes or hours earlier and never
+revisited. This is precisely why compromising one credential doesn't
+automatically grant lateral access in a mature zero trust deployment: the
+stolen credential still has to pass a *fresh* PDP evaluation at every next
+hop, and if the device posture signal ("is this request coming from the
+originally enrolled, still-compliant device") doesn't match, the PEP denies
+it regardless of how valid the credential itself is.
+
+**Device trust/posture assessment** feeds the PDP concrete, machine-checked
+attributes rather than a human attestation: an installed agent reports disk
+encryption status, patch level, and whether required security agents are
+running, and cryptographically attests this via a hardware root of trust
+(a TPM performing a **remote attestation**: the TPM signs a hash of the
+boot chain's measurements with a key that never leaves the chip, so the
+report cannot be forged by malware running at the OS level, only by
+compromising the boot chain itself before measurement). **Micro-segmentation**
+is the network-layer implementation of the same continuous-verification
+idea from Level 3 Module 1's pivoting discussion: rather than one perimeter
+firewall, every workload-to-workload connection is itself gated by a PEP
+checking service identity (often a cryptographic identity via mutual TLS,
+Level 4 Module 4) rather than IP/subnet membership — which is the specific,
+mechanism-level reason a compromised pivot host's network *position* stops
+being sufficient for lateral movement once this is in place.
+
 ## 8. Checklist
 
 - [ ] MFA is phishing-resistant (FIDO2/WebAuthn) for privileged access

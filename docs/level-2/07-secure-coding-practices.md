@@ -161,6 +161,43 @@ Semgrep catch a large fraction of the checklist automatically, on every
 commit, in CI — freeing manual review to focus on business logic and
 authorization, which tools can't reason about.
 
+## How It Actually Works: how static analysis actually finds bugs without running the code, and why allowlists are provably stronger
+
+**Static analysis** tools find vulnerabilities by building an internal
+representation of your code — an **Abstract Syntax Tree**, then a **control
+flow graph** (every possible path execution can take through the function),
+then a **data flow graph** tracking how values move between variables along
+those paths — and then performing what's called **taint analysis**: marking
+every value that originates from an untrusted source (`request.params`,
+`request.body`, a file read) as "tainted," and symbolically propagating that
+taint label through every assignment and function call along every path in
+the control flow graph. If a tainted value reaches a **sink** — a
+function known to be dangerous with untrusted input, like a raw SQL
+execution call or `eval()` — without passing through a recognized
+**sanitizer** (a parameterization call, an escaping function) on every path
+that reaches it, the tool flags it. This is precisely why static analysis
+produces false positives when it can't statically resolve a code path (e.g.,
+input passed through a custom validation function it doesn't recognize as a
+sanitizer) — it isn't reading intent, it's exhaustively enumerating paths
+through a graph and checking a label-propagation invariant.
+
+**Allowlist vs. denylist validation** has a real provable asymmetry, not
+just a stylistic preference. A denylist is a function
+`is_safe(input) = NOT input.matches(known_bad_patterns)` — it can only ever
+be as complete as the set of bad patterns someone thought to enumerate, and
+the space of "ways to encode a `<script>` tag" (case variation, null bytes,
+UTF-7 encoding, HTML entity encoding, double-encoding) is open-ended, so a
+denylist is fundamentally a race against an attacker's creativity in
+encoding. An allowlist is `is_safe(input) = input.matches(known_good_pattern)`
+— a **closed, finite specification** (e.g., "exactly one to twenty
+alphanumeric characters") that every possible input either satisfies or
+doesn't, with no encoding trick able to sneak a value outside the pattern
+past a correctly anchored regex (`^[A-Za-z0-9]{1,20}$`), because the check
+constrains the *entire* string, not just the presence/absence of a
+substring. This is a completeness argument, not a taste preference: a
+well-formed allowlist has zero degrees of freedom for an attacker to exploit,
+while a denylist has exactly as many holes as patterns nobody thought to add.
+
 ## Key terms
 
 | Term | Meaning |

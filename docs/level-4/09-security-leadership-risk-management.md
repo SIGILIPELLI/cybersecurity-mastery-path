@@ -120,6 +120,44 @@ Program-level metrics that matter to leadership:
   - Incident frequency and severity trend, MTTD/MTTR (Module 7-8)
 ```
 
+## How It Actually Works: how a risk register's numbers are actually computed, and why the four treatment options are exhaustive
+
+A risk register's likelihood/impact scores are not free-form ratings — in a
+rigorous program each is derived from the same underlying quantitative model
+introduced in Level 4 Module 1's architecture review: **Single Loss
+Expectancy (SLE)** = asset value × exposure factor (the percentage of the
+asset's value a single incident would destroy), and **Annualized Loss
+Expectancy (ALE)** = SLE × **Annualized Rate of Occurrence (ARO)**, where ARO
+is estimated from a combination of industry incident-frequency data, the
+organization's own historical incident log, and the vulnerability's CVSS-style
+exploitability metrics from Level 1 Module 1. This is the actual arithmetic
+behind why two risks with the same qualitative "High" label can be ranked
+against each other precisely for board reporting: a risk with ALE = $2M
+(rare but catastrophic) and a risk with ALE = $2M (frequent but minor) carry
+identical *expected* annual cost even though their likelihood/impact
+components differ completely — which is exactly the number executives need
+to compare against a proposed control's cost to make a rational treatment
+decision.
+
+The four risk treatment options — **avoid, mitigate, transfer, accept** —
+are exhaustive because they map to the only four things that can
+mathematically be done to the ALE formula: avoid sets the exposure to zero
+by eliminating the activity entirely (ARO effectively drops to 0); mitigate
+reduces ARO (a technical control makes exploitation less likely) or reduces
+exposure factor (a control limits blast radius, e.g. segmentation limiting
+what a breach reaches); transfer moves the *financial* consequence of the
+SLE to a third party (a cyber insurance policy) without changing the
+technical likelihood at all; accept is the explicit decision to leave the
+ALE unaddressed because its magnitude is below the organization's risk
+tolerance threshold, a number the register should state explicitly so
+"accept" is a documented decision rather than a default by inaction. Every
+control recommendation in this course — from Level 1's basic firewall rule
+to Level 4's zero trust migration — is, in a mature risk program,
+ultimately justified as a specific claim about which of these four levers it
+pulls and by how much, which is the concrete link between the technical
+material across all four levels and the boardroom conversation this module
+covers.
+
 ## 8. Checklist
 
 - [ ] Every identified risk formally treated (avoid/mitigate/transfer/accept)

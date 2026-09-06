@@ -125,6 +125,45 @@ Identifying the **highest-leverage single fix** that breaks the whole
 chain (rather than listing five equal-priority fixes) is the mark of a
 senior-level pentest report.
 
+## How It Actually Works: what actually makes a privilege-escalation or pivoting path possible, at the OS/network level
+
+Every privilege escalation path is, at its core, a case where a
+lower-privileged principal has a **write or execute path into something a
+higher-privileged principal will later trust unconditionally**. On Linux,
+the canonical structural example is a world-writable file or directory that
+a root-owned cron job or service later reads/executes: the kernel's
+permission check (Level 1 Module 3) correctly allows the low-privilege write
+because the file's mode bits say so — the escalation isn't a bypass of that
+check, it's a consequence of root later consuming attacker-controlled
+content without re-verifying trust at the consumption point. This is exactly
+why hardening baselines emphasize `umask` defaults and auditing
+world-writable paths under directories root ever touches: the vulnerability
+class is a *design* gap (missing re-validation), not a bug in the permission
+system itself.
+
+On Windows, a large share of local escalation paths exploit **weak service
+binary/DLL permissions**: a service configured to run as SYSTEM but whose
+executable path (or a DLL it loads via unqualified search order) is
+writable by a standard user lets that user's replacement binary run with
+SYSTEM's token the next time the service starts — the Security Reference
+Monitor (Level 1 Module 3) is still enforcing the DACL correctly; the flaw
+is that the DACL on the *service's file*, not the service's execution
+privilege, was set too loosely.
+
+**Lateral movement and pivoting** work by treating a compromised host as a
+network **routing hop**: a tool like a SOCKS proxy set up on the compromised
+box forwards TCP connections between the attacker's machine and hosts on
+segments the compromised box can reach but the attacker's original position
+cannot — mechanically, this only works because the segmentation control from
+Level 2 Module 1 enforces ACLs based on *source IP*, and the pivot host's
+own IP is already trusted on the internal segment, so traffic tunneled
+through it inherits that trust. This is the precise mechanism defenders
+target with **micro-segmentation** (Level 4 Module 3): if internal ACLs
+check identity/workload attributes rather than just source IP/subnet, a
+compromised host's *network position* stops being sufficient to reach
+adjacent systems, breaking the pivot at its structural root rather than
+relying on detecting the pivoting traffic after the fact.
+
 ## Key terms
 
 | Term | Meaning |

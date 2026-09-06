@@ -112,6 +112,46 @@ Improving detection coverage and shrinking detection/response time
 across repeated exercises is the actual measure of a maturing security
 program — a single exercise is a snapshot, the trend is the signal.
 
+## How It Actually Works: how adversary emulation tooling actually maps to detections, and why maturity is measured as coverage over a matrix
+
+Adversary emulation platforms (Atomic Red Team, Caldera) work by
+implementing each MITRE ATT&CK technique as a small, self-contained,
+reversible **test procedure** that performs the *exact minimal OS-level
+action* the technique describes — for T1003 (credential dumping), the test
+might invoke a specific documented Windows API sequence for reading process
+memory, not a real attacker's full toolchain, and immediately cleans up
+after itself. Running these tests one technique at a time, with blue team
+telemetry capture on, produces a **direct empirical answer** to "does our
+detection stack actually alert on this," rather than a theoretical one —
+because the test executes the identical syscalls/API calls a real technique
+would (the same sequence-based detection logic engineered in Level 3's SIEM
+module), the resulting alert (or silence) is a faithful signal, not a
+simulation of one.
+
+**Purple teaming** structurally accelerates this over a standard red-team
+engagement because it collapses the feedback loop: in a traditional
+sequential red/report/remediate cycle, the blue team only learns what was
+missed weeks later, after the engagement report — by which time the red
+team has moved to the next objective and the specific telemetry gap is
+harder to reconstruct. Running detection engineering *during* the exercise,
+technique by technique, means a missed detection can be diagnosed
+immediately against the still-fresh raw logs (was the telemetry source
+missing entirely, or present but not correlated) and often fixed and
+re-tested against the *same* technique within the same engagement — turning
+one exercise into many rapid detect/tune iterations instead of one.
+
+**Program maturity** measurement is mechanically a **coverage matrix**: an
+organization maps which of ATT&CK's ~200 techniques it has (a) genuine log
+telemetry for, (b) an active correlation rule for, and (c) empirically
+validated via emulation testing — three progressively stronger claims, since
+having a log source doesn't guarantee a rule consumes it, and having a rule
+doesn't guarantee it actually fires on the real technique until tested. This
+is why "maturity" is reported as a percentage of the matrix filled at each
+tier rather than a single score: it's a literal count of squares in a grid
+that either have or lack demonstrated, tested coverage, which is exactly
+what lets a security program track measurable progress release over release
+rather than relying on subjective confidence.
+
 ## 8. Checklist
 
 - [ ] Written rules of engagement approved before any exercise begins

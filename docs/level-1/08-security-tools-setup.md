@@ -219,6 +219,49 @@ last.
     (section 1) rather than a machine you depend on is the right approach
     while learning.
 
+## How It Actually Works: what nmap, Wireshark, and iptables are actually doing to the packets
+
+**nmap's** default SYN scan (`-sS`) works by exploiting the TCP state
+machine directly rather than completing real connections: it sends a raw SYN
+packet to each target port and inspects only the response, never finishing
+the handshake — a **SYN-ACK** response means the port is open (something is
+listening and willing to accept a connection), an **RST** means closed
+(nothing is listening, but the host is up and answering), and no response at
+all (after retransmits) typically means a firewall is silently dropping the
+packet, which nmap reports as "filtered." Because it never sends the final
+ACK, the connection never completes and the OS on the scanning machine never
+allocates a socket for it — this is why it's called a "half-open" scan and
+why it used to evade connection-logging on older systems that only logged
+fully established sessions.
+
+**Wireshark** doesn't intercept traffic in the normal sense — it asks the
+network interface driver to enter **promiscuous mode**, which disables the
+NIC's default behavior of silently discarding any Ethernet frame whose
+destination MAC address isn't its own. In promiscuous mode, every frame that
+physically reaches the NIC (on a hub, literally all traffic on the segment;
+on a switch, only broadcast/multicast traffic and whatever's addressed to
+you, unless you also configure port mirroring/SPAN) gets passed up to
+Wireshark's capture engine, which uses `libpcap`/`npcap` to attach a
+BPF (Berkeley Packet Filter) — a tiny bytecode program compiled from your
+capture filter expression — directly in the kernel, so filtering happens
+before packets are copied into user space at all, which is why capture
+filters are dramatically cheaper than display filters applied after the
+fact.
+
+**iptables** rules are evaluated by walking an ordered chain of rules
+top-to-bottom for each packet, at specific hook points in the kernel's
+network stack (`PREROUTING`, `INPUT`, `FORWARD`, `OUTPUT`, `POSTROUTING` —
+the Netfilter hooks). The first rule whose match conditions (source IP,
+destination port, protocol, connection state) are all true determines the
+packet's fate immediately — evaluation stops at that rule, which is exactly
+why rule *order* changes behavior even when the rule set's content doesn't:
+a broad `ACCEPT` placed before a specific `DROP` makes the `DROP`
+unreachable for those packets. The `-m state --state ESTABLISHED,RELATED`
+match some rules use hooks into the same connection-tracking table
+(`conntrack`) that a stateful firewall builds by watching the TCP handshake
+described in Module 2 — it's the same mechanism, exposed as a match
+condition you can write rules against directly.
+
 ## Key terms
 
 | Term | Meaning |

@@ -136,6 +136,45 @@ remediation guidance) rather than a slow, opaque gate that blocks
 releases without explanation — the latter breeds workarounds and
 resentment; the former gets fixes merged the same day they're found.
 
+## How It Actually Works: how SAST/dependency scanning integrate into CI as build-graph analysis, and how policy gates enforce without slowing the pipeline
+
+**SAST in CI** runs the same taint-analysis engine described in Level 2
+Module 7, but the integration detail that makes it usable at pipeline speed
+is **incremental analysis**: rather than re-analyzing the entire codebase's
+control-flow/data-flow graph on every commit (expensive — full-repo taint
+analysis can take longer than the rest of the build), modern SAST tools
+cache the graph from the last analyzed commit and recompute only the
+subgraph reachable from changed functions, using the same dependency-graph
+diffing idea a build system like Bazel uses for incremental compilation.
+This is why SAST scan time in CI scales roughly with the size of a *diff*
+rather than the size of the repository, which is what makes running it on
+every pull request economically viable instead of only nightly.
+
+**Dependency/supply-chain scanning** works by resolving your project's full
+transitive dependency tree, computing a cryptographic hash of each resolved
+package version, and checking those hashes/version-CPEs against the same
+NVD-backed CVE database mechanism from Level 2 Module 5's vulnerability
+scanning — applied to your build manifest instead of a live network host.
+The **SBOM** (Software Bill of Materials) this produces is the artifact that
+makes this checkable *after* the fact too: because it's a hash-identified,
+versioned list, a newly disclosed CVE can be matched against every SBOM an
+organization has ever generated to instantly answer "which of our shipped
+builds contain the vulnerable version," without re-scanning any running
+system.
+
+**Policy-as-code gating** in CD is a synchronous call, at the deployment
+step, to the identical Rego/OPA evaluation engine from Level 3 Module 6's
+CSPM — the gate blocks the pipeline's next step until the policy evaluation
+returns `allow`. This scales to hundreds of deployments per day precisely
+because the policy check is a small, fast, local (no external network round
+trip in most implementations) function evaluation against the manifest
+about to be deployed, not a human review step — the same allow/deny
+determinism from IAM evaluation, just invoked automatically at a pipeline
+checkpoint instead of at request time. **Runtime drift detection** closes the
+loop by continuously re-running the same CSPM diff (Level 3 Module 6) after
+deployment, catching the specific case policy-as-code gating cannot: a
+resource changed directly in production after the gate already passed it.
+
 ## 9. Checklist
 
 - [ ] SAST, dependency, and secrets scanning run automatically in CI

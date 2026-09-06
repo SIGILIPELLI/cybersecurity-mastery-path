@@ -147,6 +147,49 @@ awk '{print $7, $9}' access.log | grep " 404" | sort | uniq -c | sort -rn | head
 - Time-synchronize every log source (NTP) — correlating events across
   systems is meaningless if their clocks disagree.
 
+## How It Actually Works: how Elasticsearch actually makes a billion log lines searchable in milliseconds
+
+A SIEM's core promise — searching gigabytes of logs across weeks in under a
+second — isn't magic, it's a data structure: the **inverted index**, the
+same idea behind a book's back-of-the-book index. Instead of storing logs
+and scanning them linearly at query time (which is what `grep` on a huge
+file does, and why it gets slow), Elasticsearch tokenizes every log line at
+*ingest* time into terms, and for every term builds a sorted list of every
+document ID that contains it:
+
+```
+term "ssh"     → [doc_3, doc_17, doc_204, doc_9981, ...]
+term "failed"  → [doc_3, doc_18, doc_204, ...]
+term "192.168.1.50" → [doc_3, doc_204, ...]
+```
+
+A query like `ssh AND failed AND 192.168.1.50` then becomes a fast
+**intersection** of three already-sorted lists — an operation that scales
+with the size of the *result*, not the size of the entire dataset, which is
+the actual mechanical reason a query against terabytes of indexed logs can
+still return in milliseconds while a linear scan of the same volume would
+take minutes. This is also why ingest-time parsing (structuring a raw log
+line into named fields — `src_ip`, `user`, `action` — rather than one opaque
+text blob) matters so much: a field-scoped query (`src_ip:192.168.1.50`)
+only has to intersect that field's much smaller per-value posting list,
+while an unstructured full-text search has to consider every term across
+every field.
+
+**Detection queries** built on this index are typically expressed as
+**aggregations over a time bucket** rather than single-event matches — "count
+of `event=login_failed` grouped by `src_ip`, bucketed into 5-minute windows,
+where count > 20" — because the inverted index makes counting matches in a
+range just as cheap as finding them, so the entire brute-force-detection
+rule from Module 9 (Level 1) is really just one aggregation query re-run on
+a schedule. **Log integrity** protections exploit hash chaining for the same
+reason blockchains do: each log entry (or batch) is hashed together with the
+*previous* entry's hash, so altering any historical entry changes its hash,
+which no longer matches what the next entry recorded as "previous hash" —
+propagating a detectable mismatch forward through every subsequent entry.
+Tamper-evidence here doesn't require encrypting the logs at all, just this
+one-way chaining property inherited directly from the hash function
+properties covered in Level 1 Module 4.
+
 ## Key terms
 
 | Term | Meaning |

@@ -121,6 +121,44 @@ different industry, region, and technology stack than yours is
 interesting reading, not an action item — chasing every published IOC
 regardless of relevance burns analyst time without reducing real risk.
 
+## How It Actually Works: why the Pyramid of Pain's ordering is a real cost function, not a metaphor
+
+The Pyramid of Pain ranks indicator types (hash values, IP addresses, domain
+names, network/host artifacts, tools, TTPs) by how much it actually costs an
+attacker to change each one — and that cost is a direct, computable
+consequence of what each indicator is *made of*. A file hash is a
+deterministic function of every byte in the file (Level 1 Module 4's
+avalanche property again): recompiling with a single flag change, or even
+padding the binary with a few extra null bytes, produces a completely
+different hash for functionally identical malware — so a hash-based
+detection rule can be defeated by an attacker in seconds, at essentially
+zero engineering cost, which is exactly why hashes sit at the bottom of the
+pyramid. An IP address requires provisioning new infrastructure (renting a
+new VPS, registering with a new provider) — a real but small cost, minutes
+to hours. A domain name requires registration, DNS propagation, and often
+building reputation to avoid immediate blocklisting — hours to days. **TTPs**
+(Tactics, Techniques, and Procedures) sit at the top because they describe
+*how the attacker fundamentally operates* — a specific technique for
+credential harvesting, a specific lateral-movement approach — and changing
+these requires redesigning the actual operational tradecraft, retraining
+operators, and rebuilding tooling, which can cost an adversary organization
+months and real money. Detection built at the TTP level (behavioral,
+MITRE ATT&CK-aligned rules, exactly what Module 5's detection engineering
+covers) forces the attacker to pay the *highest* cost to evade it — this is
+the literal mechanism behind "detecting TTPs causes the most pain."
+
+**STIX** operationalizes this by encoding intelligence as typed, linked
+objects rather than free text — an `indicator` object (a specific hash or IP)
+can be explicitly linked via a `relationship` object to the `attack-pattern`
+object (a MITRE ATT&CK technique ID) it was observed implementing, and to
+the `threat-actor` object believed responsible. This graph structure is what
+lets automated tooling propagate confidence and pivot programmatically ("show
+me every indicator ever linked to this attack-pattern, across every
+threat-actor object in our feed") — a query that's only possible because the
+relationships are explicit, typed graph edges rather than implied by
+narrative prose in an analyst's report, which is the actual reason STIX/TAXII
+feeds are machine-actionable in a way that PDF threat reports are not.
+
 ## 8. Checklist
 
 - [ ] Intelligence requirements defined by business stakeholders, not just IT

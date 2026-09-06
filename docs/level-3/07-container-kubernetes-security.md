@@ -169,6 +169,50 @@ spec:
                   =(privileged): "false"
 ```
 
+## How It Actually Works: what actually isolates a container, and how Kubernetes network policy is enforced in the kernel
+
+A container is not a lightweight VM — it's a set of ordinary Linux processes
+made to *look* isolated using three independent kernel features, and
+understanding this is what makes "container escape" concrete rather than
+mysterious. **Namespaces** give a process its own view of a global resource:
+a PID namespace makes a container's process see itself as PID 1 with no
+visibility into host processes; a mount namespace gives it its own
+filesystem root; a network namespace gives it its own interfaces and
+routing table. **Cgroups** (control groups) limit and account for resource
+usage (CPU shares, memory ceilings) — the mechanism behind
+`--memory=512m`. Neither of these is a security boundary in the way a
+hypervisor is: both features change what a process *can see or is limited to
+consuming*, not what it fundamentally has permission to do. That's the third
+piece — **capabilities and seccomp**: by default a container process still
+runs as a Linux process subject to the same DACL/capability checks from
+Level 1 Module 3, and a container escape typically means the containerized
+process retained a capability (like `CAP_SYS_ADMIN`, or running genuinely as
+UID 0 with no user-namespace remapping) that lets it perform an operation —
+mounting the host filesystem, loading a kernel module — that reaches outside
+its namespace's intended view and touches the shared, single kernel every
+container on that host actually runs on. Runtime hardening (seccomp
+profiles, dropping capabilities, `readOnlyRootFilesystem`) works by removing
+exactly the syscalls and capabilities a given workload doesn't need, shrinking
+this shared-kernel attack surface to only what's actually required.
+
+**Kubernetes NetworkPolicy** resources don't do the actual packet filtering
+themselves — they're a declarative spec that the cluster's CNI plugin (Calico,
+Cilium) compiles down into the same kernel-level packet filtering primitives
+covered earlier: iptables rules or, in eBPF-based CNIs, small verified
+programs attached at kernel hook points that run per-packet with near-native
+speed. A "default-deny" NetworkPolicy is enforced by the CNI installing a
+DROP rule matching all pod-to-pod traffic in that namespace, then adding
+specific ALLOW rules only for the explicitly permitted pod-selector pairs
+— structurally identical to the iptables ordered-chain evaluation from Level
+1 Module 8, just auto-generated and continuously reconciled from the
+Kubernetes API object instead of hand-written. RBAC on the API server itself
+enforces a third, independent layer above the network: every API request
+carries the caller's authenticated identity, and the API server evaluates it
+against Role/RoleBinding objects using the identical allow-only,
+default-deny evaluation model as cloud IAM (Level 2 Module 8) — meaning a
+compromised pod that has no ServiceAccount token bound to any RoleBinding
+simply cannot call the API server at all, regardless of network reachability.
+
 ## 8. Checklist
 
 - [ ] Images built from minimal base images, scanned in CI, non-root by default

@@ -124,6 +124,46 @@ services all implement the same idea as Level 1's least privilege, applied
 to network paths instead of user permissions — a web server should be able
 to reach *only* its database on *only* the DB port, nothing else.
 
+## How It Actually Works: how an IDS actually matches a signature against a live stream
+
+A network IDS like Snort/Suricata doesn't "read" traffic the way a human
+reads a log — it reassembles a raw stream of packets into ordered TCP
+segments (undoing fragmentation and out-of-order delivery first, since an
+attacker can deliberately fragment an attack across multiple packets
+specifically to make each individual packet look benign), then runs the
+reassembled byte stream through a **multi-pattern matching engine**. Most
+production engines use an automaton-based algorithm (Aho–Corasick is the
+classic choice): every signature's content pattern is compiled once into a
+single finite-state machine that can search for thousands of patterns
+*simultaneously* in one pass over the bytes, rather than checking one
+pattern at a time — this is what makes signature matching feasible at
+multi-gigabit line rates. A rule like
+
+```
+alert tcp any any -> $HOME_NET 22 (msg:"SSH brute force attempt";
+  flow:to_server; content:"SSH-2.0"; threshold:type threshold,
+  track by_src, count 5, seconds 60; sid:1000010;)
+```
+
+encodes both a **content match** (does this byte sequence appear in the
+stream at all) and a **stateful condition** (`threshold`, which requires the
+engine to keep a per-source counter across multiple packets over a time
+window) — meaning the IDS is simultaneously running the pattern-matching
+automaton *and* maintaining small pieces of session state, which is exactly
+why signature-based detection has a real, bounded computational cost per
+connection rather than being "free."
+
+**Segmentation's** actual enforcement point is the same conntrack/ACL
+mechanism from Module 1's firewalls, applied at a boundary between VLANs or
+subnets rather than at the internet edge: a router or L3 switch consults its
+access control list on every packet crossing between segments, and because
+each segment is a separate broadcast domain, a compromised host in one VLAN
+physically cannot see ARP or broadcast traffic from another VLAN even before
+any ACL is evaluated — the isolation is partly structural (separate Ethernet
+broadcast domain) and partly policy (the ACL), which is why segmentation
+degrades gracefully even if one ACL rule is misconfigured, unlike a flat
+network where a single firewall bypass exposes everything.
+
 ## Key terms
 
 | Term | Meaning |

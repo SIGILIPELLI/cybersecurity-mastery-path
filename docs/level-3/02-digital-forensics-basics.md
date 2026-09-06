@@ -141,6 +141,45 @@ each stage, findings, and a clear separation between **fact** ("event
 X occurred at timestamp Y per artifact Z") and **interpretation**
 ("this is consistent with data staging prior to exfiltration").
 
+## How It Actually Works: how a disk image is bit-for-bit verified, and how a filesystem timeline is actually reconstructed
+
+**Disk imaging integrity** rests on cryptographic hashing exactly as
+described in Level 1 Module 4, applied at forensic scale: the examiner hashes
+the source drive (commonly with SHA-256, historically MD5) *before*
+acquisition, then hashes the resulting image file after, and the two must
+match exactly. Because a hash function's avalanche property means a single
+flipped bit anywhere in gigabytes of data changes roughly half the output
+bits, a matching hash is strong evidence — not just documentation — that the
+image is a perfect bit-for-bit copy, including deleted files, filesystem
+metadata, and slack space, not merely the "logical" files a normal copy
+would preserve. This is why imaging tools use a **write blocker** at the
+hardware or driver level: it physically or logically intercepts every write
+command sent to the source drive and drops it, so the acquisition process
+itself cannot alter the evidence it's trying to preserve — without it, even
+mounting the drive read-only in some OSes can trigger journal replay writes
+that change the very hash you're trying to preserve unmodified.
+
+**Timeline analysis** works because filesystems record more temporal
+metadata than most people realize. NTFS, for instance, keeps eight
+timestamps per file across two attribute records (`$STANDARD_INFORMATION`
+and `$FILE_NAME`), each with its own Modified/Accessed/Created/Entry-modified
+values — and critically, the two records update under *different* rules
+(`$STANDARD_INFORMATION` timestamps can be trivially altered by
+user-space "timestomping" tools using documented Windows APIs, but
+`$FILE_NAME` timestamps are only updated by the NTFS driver itself during
+specific low-level operations). An analyst builds a **super-timeline** by
+extracting every timestamp from every available source — filesystem
+metadata, the Windows Event Log (itself a chain of timestamped, sequentially
+numbered records, making gaps detectable), registry key last-write times,
+browser history — and sorting the union chronologically. Log entries and
+artifacts corroborate each other because a genuine sequence of actions
+leaves consistent traces across *independent* subsystems that an attacker
+would need to separately falsify; a mismatch between what
+`$STANDARD_INFORMATION` claims and what the (harder-to-forge)
+`$FILE_NAME` record or Event Log shows for the same file is itself forensic
+evidence of tampering, which is exactly how timestomping gets detected
+rather than simply trusted.
+
 ## 8. Checklist
 
 - [ ] Evidence hashed before analysis; hash re-verified before reporting

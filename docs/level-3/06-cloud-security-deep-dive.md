@@ -148,6 +148,45 @@ Catching a public-bucket misconfiguration in a pull request review is
 free; catching it after data has already been exfiltrated is a breach
 notification.
 
+## How It Actually Works: how CSPM tools actually detect drift, and how secrets managers avoid ever exposing the plaintext
+
+A CSPM tool's core mechanism is a continuous **diff against a policy-as-code
+baseline**: it periodically calls each cloud provider's read-only
+configuration APIs (AWS Config, Azure Resource Graph) to pull the current
+state of every resource as a structured document, evaluates that document
+against a library of rules expressed declaratively (often in Rego, the Open
+Policy Agent language — the same policy-evaluation approach underlying the
+IAM allow/deny logic from Level 2 Module 8, generalized to arbitrary resource
+types), and flags any resource whose actual configuration doesn't satisfy
+the expected invariant. Because this pulls live API state rather than
+relying on infrastructure code being kept in sync with reality, it catches
+**configuration drift** — a change made directly through the console or CLI
+outside of any IaC pipeline — which static analysis of Terraform files
+alone structurally cannot see, since that analysis only ever inspects the
+*intended* state, not the *actual* one.
+
+**Secrets managers** (AWS Secrets Manager, HashiCorp Vault) solve a problem
+envelope encryption alone doesn't: an application still needs the plaintext
+secret in memory to use it, so the manager's real job is minimizing the
+secret's *lifetime and surface area* rather than just encrypting it at rest.
+Mechanically, the workflow is: the application authenticates to the secrets
+manager using its own short-lived identity (a cloud IAM role, a Kubernetes
+service account token) rather than a static credential; the manager verifies
+that identity against policy (again, an allow/deny evaluation) and returns
+the secret over an encrypted channel, at request time, into process memory
+only — never written to disk, environment variables, or a config file
+checked into version control. **Automatic rotation** works because the
+manager, not the application, holds the authority to change the credential
+at the backing service (e.g., calling a database's `ALTER USER` to set a
+new password) and atomically updates its own stored copy — the two are
+changed as a single operation the manager coordinates, which is what
+prevents the classic rotation failure mode of the credential changing before
+every consumer has fetched the new value. Infrastructure-as-code scanning
+tools apply the identical taint-analysis idea from Level 2 Module 7's static
+analysis to `.tf`/`.yaml` files themselves: tracing whether a hardcoded
+string reaching a `password` or `secret` field ever originated from a
+secrets-manager reference versus a literal value baked into version control.
+
 ## 8. Checklist
 
 - [ ] Multi-account structure separates prod, dev, and security/logging

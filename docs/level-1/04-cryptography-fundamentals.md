@@ -157,6 +157,54 @@ through.
     CA, the validity dates, and (if you dig into details) the public key
     algorithm — RSA or ECDSA — all concepts from this module made concrete.
 
+## How It Actually Works: what makes a hash collision-resistant, and how the TLS handshake actually negotiates keys
+
+A cryptographic hash function like SHA-256 processes input in fixed-size
+blocks (512 bits) through a **compression function** applied iteratively
+(the Merkle–Damgård construction): each block is mixed into a running state
+using bitwise rotations, XORs, and modular additions specifically chosen so
+that flipping a single input bit changes roughly half the output bits (the
+**avalanche effect**) — this is why hashes look "random" even though they're
+fully deterministic. Collision resistance isn't a proof that no two inputs
+ever produce the same 256-bit output (with a 256-bit output space and
+unlimited possible inputs, collisions must exist by pigeonhole) — it's a
+claim about *computational* infeasibility: the best known attack still
+requires roughly 2^128 hash evaluations to find one (the birthday bound),
+which at billions of hashes per second per GPU is still longer than the age
+of the universe. This is why MD5 (broken in ~2^18 operations) and SHA-1
+(broken in ~2^63) are deprecated — not because their math is different in
+kind, but because cryptanalysis found shortcuts in their specific
+compression function that shrink that number to something reachable.
+
+TLS combines all three primitives from this module in one handshake, and the
+sequencing matters:
+
+```
+1. ClientHello   → client offers supported cipher suites + random nonce
+2. ServerHello   → server picks a suite, sends its certificate (public key)
+3. Key exchange  → both sides derive the SAME symmetric session key using
+                    asymmetric math (commonly ECDHE: Elliptic Curve
+                    Diffie-Hellman, Ephemeral) — without ever transmitting
+                    the key itself over the wire
+4. Finished      → both sides send a hash (HMAC) of the entire handshake
+                    transcript so far, encrypted under the new key
+5. Application data → now flows encrypted under the fast symmetric cipher
+```
+
+The reason step 3 uses asymmetric crypto only to *establish* a key, then
+switches to symmetric encryption for the actual data, is pure performance:
+asymmetric operations (modular exponentiation over large primes, or point
+multiplication on an elliptic curve) cost orders of magnitude more CPU per
+byte than symmetric ciphers like AES, which are simple enough to have
+dedicated CPU instructions (AES-NI). The "E" in ECDHE (ephemeral) means a
+fresh key pair is generated for every single handshake and discarded
+afterward — so even if an attacker later steals the server's long-term
+private key, they cannot decrypt previously captured traffic, because that
+traffic's session key was never derived from the long-term key in the first
+place. This property is called **forward secrecy**, and it's the concrete
+reason "record everything now, decrypt later" doesn't work against a
+correctly configured modern TLS deployment.
+
 ## Key terms
 
 | Term | Meaning |

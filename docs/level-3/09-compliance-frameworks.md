@@ -115,6 +115,40 @@ continuously so an audit is a formality confirming what's already known,
 not a fire drill — directly leveraging the CSPM (Module 6) and SIEM
 (Module 5) tooling already built.
 
+## How It Actually Works: how a single technical control satisfies multiple frameworks simultaneously, and what "continuous compliance" automates
+
+Frameworks look different on the surface — ISO 27001's Annex A controls,
+PCI DSS's 12 numbered requirements, NIST CSF's five functions — but a large
+fraction of their technical requirements reduce to the same handful of
+underlying mechanisms this course has already covered, which is *why*
+cross-mapping (section 7) is possible at all rather than being a lucky
+coincidence. PCI DSS Requirement 8 (unique IDs, strong authentication), ISO
+27001's Annex A.9 (access control), and SOC 2's logical access criteria are
+all, at the implementation level, asking the same question: does your IAM
+system enforce unique identity, MFA, and least privilege via the allow/deny
+policy evaluation model from Level 2 Module 8? A single correctly configured
+IAM deployment with audit logging can produce evidence satisfying all three
+frameworks' access-control clauses, because the frameworks are independently
+describing requirements for the same underlying control category, not three
+different technical implementations.
+
+**Continuous compliance** tooling automates evidence collection by running
+the same CSPM diff-against-baseline mechanism from Level 3 Module 6, but
+mapping each policy-as-code rule to the specific framework clause(s) it
+satisfies, and re-evaluating on every configuration change rather than
+once a year. Concretely: a Rego rule checking "all S3 buckets must have
+encryption enabled" is tagged as evidence for PCI DSS Requirement 3, ISO
+27001 A.8.24, and SOC 2 CC6.1 simultaneously — one continuously-running
+check, three frameworks' worth of audit evidence generated automatically
+every time it passes. This is the concrete mechanism behind "continuous
+compliance replacing point-in-time audits": a point-in-time audit samples
+configuration state on one day and infers steady-state behavior from that
+sample; continuous compliance instead runs the check on *every* relevant
+change event, closing the gap where a system was compliant on audit day and
+drifted out of compliance the next week — a gap that traditional annual
+audits are structurally incapable of detecting until the following year's
+audit.
+
 ## 9. Checklist
 
 - [ ] Applicable frameworks identified based on industry, data handled, customers

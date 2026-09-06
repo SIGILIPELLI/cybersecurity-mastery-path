@@ -131,6 +131,59 @@ if hmac.compare_digest(user_provided_token, stored_token):
     ...
 ```
 
+## How It Actually Works: how certificate chain validation and revocation checking actually run, and why post-quantum crypto changes the math, not just the key size
+
+Validating a certificate is a **recursive chain-of-signatures check**: a
+leaf certificate is verified by using the issuing CA's public key to check
+the signature over the leaf's contents — if that signature verifies, the
+client next needs to trust the issuing CA's own certificate, which is
+itself verified by *its* issuer's public key, and this repeats until the
+chain reaches a **root CA certificate** already present in the client's
+local trust store (installed by the OS/browser vendor, not fetched over the
+network — the one link in the whole chain that has to be trusted
+axiomatically rather than proven). Every step is exactly the digital
+signature verification from Level 1 Module 4: decrypt the signature with the
+issuer's public key, compare the result against an independently computed
+hash of the certificate's contents. This recursive structure is precisely
+why compromising *any single CA anywhere in the trusted root store* is
+catastrophic industry-wide — that CA can then forge a validly-chaining
+certificate for any domain, and every client's validation will succeed
+because the mathematical chain checks out even though the certificate is
+fraudulent.
+
+**Revocation checking** exists because chain validation alone can't detect
+"this certificate was valid but the private key has since been stolen." The
+original mechanism, **CRLs** (Certificate Revocation Lists), had the CA
+publish a periodically-updated signed list of revoked serial numbers — a
+client checking a cert against a CRL is fundamentally a batch, stale-by-design
+check (typically updated daily). **OCSP** replaced this with a live query:
+"is serial number X still valid?" answered in real time by an OCSP
+responder — but this leaks every site a user visits to that responder and
+adds a network round-trip (and latency) to every TLS handshake, and fails
+insecurely if the responder is unreachable ("soft-fail" was the historical
+default). **OCSP stapling** fixes both: the *web server itself* periodically
+fetches a signed, time-stamped OCSP response for its own certificate and
+attaches ("staples") it directly to the TLS handshake, so the client
+verifies a fresh, CA-signed non-revocation proof without ever contacting the
+OCSP responder itself — privacy preserved, latency removed, because the
+proof rides along with data the server was sending anyway.
+
+**Post-quantum readiness** is not "bigger keys" — it's a wholesale algorithm
+swap because Shor's algorithm, run on a sufficiently large quantum computer,
+solves the specific mathematical problems (integer factorization for RSA,
+discrete logarithm for Diffie-Hellman/ECDHE) that today's asymmetric
+cryptography's security *entirely* depends on, in polynomial rather than
+exponential time — no key size increase defends against an algorithm that
+changes the complexity class of the underlying problem itself. NIST's
+selected post-quantum algorithms (like CRYSTALS-Kyber for key exchange)
+instead rest on **lattice-based problems** (finding short vectors in a
+high-dimensional lattice), for which no efficient quantum algorithm is
+currently known — which is exactly why "hybrid" deployments run a classical
+ECDHE exchange *and* a lattice-based exchange in parallel and combine both
+outputs into the session key: the session remains secure as long as at
+least one of the two underlying hard problems holds, hedging against a
+future break in either one alone.
+
 ## 8. Checklist
 
 - [ ] Root CA kept offline; intermediates handle day-to-day issuance

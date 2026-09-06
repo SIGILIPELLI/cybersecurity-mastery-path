@@ -142,6 +142,46 @@ pointing you at an attacker's server should trigger a certificate warning —
 one of the reasons you should never click through a browser certificate
 warning without understanding why it appeared.
 
+## How It Actually Works: the TCP three-way handshake and why it's exploitable
+
+Every TCP connection starts with the handshake — **SYN → SYN-ACK → ACK** —
+and the reason it's three messages, not one, is that TCP needs both sides to
+prove they can both send *and* receive before any data flows:
+
+```
+Client                              Server
+  |----------- SYN, seq=x ---------->|   "I want to talk, my sequence starts at x"
+  |<---- SYN-ACK, seq=y, ack=x+1 ----|   "OK, I heard you, my sequence starts at y"
+  |----------- ACK, ack=y+1 -------->|   "Confirmed, here's data if any"
+```
+
+The server allocates a small chunk of memory (a **connection control block**,
+sitting in the "SYN-RECEIVED" state) the instant the SYN arrives — before the
+handshake even completes. This is precisely the mechanism a **SYN flood**
+abuses: send SYNs from spoofed source addresses and never send the final ACK,
+and the server's backlog queue of half-open connections fills up, refusing
+new legitimate connections. The defensive mechanism, **SYN cookies**, avoids
+storing state at all: instead of allocating a control block on SYN receipt,
+the server encodes the connection parameters (source/dest IP and port,
+a timestamp, an MSS index) into the initial sequence number it sends back,
+cryptographically keyed with a secret that rotates over time. When the real
+ACK comes back, the server recomputes the same cookie from the packet's
+addresses and the returned ack number; if it matches, the connection is
+accepted and state is only allocated *then*. No matching cookie can be forged
+without knowing the rotating secret, so spoofed SYNs consume zero server
+memory — the flood becomes free to absorb rather than free to launch.
+
+**Firewalls filter on this same state.** A *stateless* packet filter checks
+each packet's header fields in isolation (block/allow by IP+port), so it
+cannot tell a legitimate mid-connection ACK from a forged one. A *stateful*
+firewall maintains its own connection table mirroring the TCP state machine
+(NEW → ESTABLISHED → RELATED) and only allows a packet through if it fits the
+expected next state for its connection — an ACK is only valid if a matching
+SYN/SYN-ACK pair already opened that flow. This is why nearly every real
+firewall since the mid-1990s is stateful: it turns "does this packet look
+okay?" into "does this packet make sense given everything I've already seen
+on this connection?" — a categorically stronger check.
+
 ## Key terms
 
 | Term | Meaning |

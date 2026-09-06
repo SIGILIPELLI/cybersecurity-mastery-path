@@ -158,6 +158,43 @@ firewall rule *plus* an unpatched server *plus* no monitoring *plus* no
 backups is a company-ending event. Every layer you add is another chance to
 catch or contain a problem before it becomes the latter.
 
+## How It Actually Works: risk scoring under the hood
+
+"High/medium/low risk" in a report is usually the human-readable output of a
+scoring model, not a gut feeling. The most widely used one, **CVSS (Common
+Vulnerability Scoring System)**, computes a 0–10 score from metrics grouped
+into a base equation roughly shaped like:
+
+```
+Base Score = f( Exploitability metrics, Impact metrics )
+Exploitability = f(Attack Vector, Attack Complexity, Privileges Required,
+                    User Interaction)
+Impact         = f(Confidentiality, Integrity, Availability loss)
+```
+
+Each metric is an enumerated value (e.g., Attack Vector: Network / Adjacent /
+Local / Physical) that maps to a fixed numeric weight defined in the CVSS
+specification; the formula combines them with fixed coefficients derived so
+that a network-reachable, no-auth-required, high-impact flaw lands near 9–10,
+while a local, high-complexity, low-impact one lands near 2–3. This is why two
+analysts scoring the same CVE independently converge on nearly the same
+number — it isn't opinion, it's a deterministic function of metric values,
+which is also why the "Risk ≈ Threat × Vulnerability × Impact" mental model
+above has a real, computable cousin in production tooling.
+
+Underneath *threat* modeling specifically, frameworks like **STRIDE**
+(Spoofing, Tampering, Repudiation, Information disclosure, Denial of service,
+Elevation of privilege) work by walking a system's data-flow diagram edge by
+edge and asking, for each of the six categories, "does this trust boundary
+allow this?" A trust boundary is any point where data crosses from a
+lower-privilege context into a higher-privilege one (browser → server,
+user → root, one microservice → another) — and it's specifically at these
+boundaries that validation, authentication, and authorization checks must
+exist, because everywhere *inside* a trust boundary the components already
+trust each other by construction. Mapping trust boundaries first, then
+threats, is why professional threat models are diagrams before they are
+prose.
+
 ## Key terms
 
 | Term | Meaning |

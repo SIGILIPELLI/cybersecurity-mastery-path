@@ -127,6 +127,43 @@ This format — Title / Severity / Location / Description / Reproduction /
 Impact / Remediation — is the backbone of every real pentest report you'll
 write in this course (see Level 2 Module 10 and Level 3 Module 10).
 
+## How It Actually Works: how an intercepting proxy sits inside HTTPS, and what an automated scanner can and can't see
+
+An intercepting proxy (Burp Suite, ZAP) reading and modifying HTTPS traffic
+without breaking encryption sounds like it should be impossible — TLS exists
+specifically to prevent a middle party from reading traffic. The trick is
+that the proxy doesn't break your browser's TLS session with the server; it
+terminates *two separate* TLS connections: browser-to-proxy and
+proxy-to-server, presenting the browser with its **own** certificate for
+each site, signed by a CA certificate it generated locally. Your browser
+only accepts that certificate because you manually installed the proxy's CA
+certificate into your OS/browser trust store during setup — that one step is
+the entire mechanism, and it's exactly why this only works on traffic you
+control the endpoint for: a proxy cannot intercept a connection unless the
+client trusts its substitute certificate, which is also precisely why the
+same technique fails (by design) against a phone you haven't rooted or a
+service using **certificate pinning**, where the app hardcodes which exact
+certificate (or public key) it will accept and ignores the OS trust store
+entirely.
+
+**Automated scanners** work by combining a crawler (which discovers URLs and
+forms by parsing HTML/JS and following links) with an **active fuzzing
+engine** that resubmits each discovered parameter with a library of
+known-bad payloads (`' OR '1'='1`, `<script>alert(1)</script>`, path
+traversal sequences) and inspects the response for signatures of success —
+a SQL error string, a reflected unescaped payload, an anomalous response
+time (for blind/time-based injection, where the payload contains something
+like `SLEEP(5)` and the scanner just measures whether the response took ~5
+seconds longer). This is mechanically why scanners are strong at *known
+pattern* classes (injection, XSS) and structurally blind to **business logic
+flaws** (a discount code appliable twice, a price parameter trusted from the
+client) — those aren't malformed input at all, every request is
+syntactically valid and passes every generic payload check; detecting them
+requires understanding what the *feature* is supposed to do, which is a
+semantic judgment no generic fuzzer's success oracle can make. This is the
+concrete, mechanism-level reason human manual testing (Module 4) can never
+be fully replaced by scanning, not just a hedge from the text.
+
 ## Key terms
 
 | Term | Meaning |

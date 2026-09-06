@@ -137,6 +137,49 @@ good decisions harder:
 5. **Backup restoration procedure**, tested in advance — a backup you've
    never restored from is a hypothesis, not a plan.
 
+## How It Actually Works: how detection actually correlates events, and why volatile evidence has to be captured in order
+
+A single log line rarely proves an incident; detection tooling works by
+**correlation across time and source** — matching low-signal events from
+independent systems that only become meaningful together. A SIEM's
+correlation engine (Level 2 Module 6 goes deeper) typically operates as a
+rules engine over a sliding time window: "IF a failed-login count from one
+source IP exceeds N within 5 minutes AND is followed within 1 hour by a
+successful login from that same account THEN raise an alert for
+credential-stuffing-then-success." Mechanically, this requires normalizing
+timestamps and identifiers across systems with different clocks and log
+formats *before* correlation can work at all — which is precisely why
+"why does our SIEM miss things" so often traces back to inconsistent time
+sync (NTP drift) or field-mapping bugs rather than a missing detection rule.
+
+**Order of volatility** in evidence handling isn't a convention, it's a
+direct consequence of how modern hardware forgets things. RAM (register
+values, running process memory, encryption keys held in memory, network
+connection tables) decays and is overwritten by ongoing system activity on
+the order of seconds to minutes — every additional command you run on a live
+system evicts more of what was there before you arrived. Disk contents
+persist until overwritten by new writes, which happens on the order of hours
+to months depending on activity. This is why an IR playbook insists on
+**memory acquisition before disk imaging**: a tool like a memory dumper (or
+even `dd` against `/dev/mem`) has to run *on the live system*, and every
+second it runs, ordinary system activity (the OS itself, any background
+process) is asynchronously overwriting the very RAM you're trying to
+preserve — so you image what decays fastest, first.
+
+**Containment strategies** map directly onto where in the network stack you
+can still act without destroying evidence. Network-level containment
+(isolating a host's VLAN, blackholing its IP at the switch) preserves the
+host's memory and disk exactly as they are, at the cost of leaving the
+compromised process running (useful if you still need to observe C2
+behavior for attribution). Host-level containment (killing the process,
+pulling the network cable) stops damage immediately but the act of doing so
+is itself destructive to memory: killing a process deallocates its memory
+immediately, and a hard power-off (rather than a clean shutdown) is
+sometimes deliberately preferred specifically because a clean shutdown
+triggers processes that could wipe their own traces on the way down, and
+because a hard cut preserves whatever was in RAM in the disk's hibernation
+file, if one exists, versus a normal shutdown flushing and clearing it.
+
 ## Key terms
 
 | Term | Meaning |

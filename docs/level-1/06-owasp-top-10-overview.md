@@ -223,6 +223,51 @@ on: nearly every injection-class vulnerability is a variant of "we let
 attacker-controlled text influence how a downstream interpreter parses
 something."
 
+## How It Actually Works: why SQL injection and XSS happen at the parser level, and why parameterization actually fixes it
+
+Both SQL injection and XSS exist for the same underlying reason: a program
+concatenates untrusted data into a string that is then handed to a
+*different* interpreter (a SQL engine, an HTML/JS renderer), and that
+interpreter has no way to tell "this part is code the developer wrote" from
+"this part is data a user typed" — because by the time it receives the
+string, both look like identical characters.
+
+```
+query = "SELECT * FROM users WHERE name = '" + input + "'"
+```
+
+If `input` is `x' OR '1'='1`, the SQL parser tokenizes the final string
+exactly as written — it has no memory of where the developer's string
+literal was "supposed" to end, because that boundary was lost the moment
+concatenation happened. The parser faithfully executes
+`WHERE name = 'x' OR '1'='1'`, a syntactically valid, semantically different
+query. **Parameterized queries (prepared statements)** fix this by sending
+the query template and the data to the database as two *separate* messages
+over the wire: the database compiles the SQL structure first — literally
+building a parse tree with placeholder slots — before the parameter values
+ever arrive. Once compiled, those slots are typed data locations, not code
+positions, so a value like `x' OR '1'='1` is bound as a single literal
+string value to compare against, with the quote character treated as three
+harmless bytes rather than syntax. The vulnerability class doesn't get
+"detected and blocked" — it becomes structurally impossible, because the
+data channel and the code channel are never merged again.
+
+XSS follows the identical shape one layer up the stack: untrusted input gets
+concatenated into HTML that a browser's parser then tokenizes. If input
+contains `<script>`, and it lands in a context the parser reads as element
+content, the browser's HTML tokenizer opens a new script-parsing state right
+there — it cannot distinguish "text the developer wrote" from "text a user
+submitted" any more than the SQL parser could. **Output encoding** (escaping
+`<` to `&lt;`, `"` to `&quot;`, etc., context-appropriately) is the browser
+equivalent of parameterization: it doesn't hide the malicious string, it
+transforms it into a sequence of characters that the parser's grammar can
+only ever interpret as literal text, never as a tag or attribute boundary.
+This is also why context matters enormously — encoding that's correct
+inside an HTML attribute is wrong inside a `<script>` block or a URL, because
+each of those has a different parser/grammar with different special
+characters, which is exactly why "just escape everything the same way"
+sanitizers keep failing in production.
+
 ## Key terms
 
 | Term | Meaning |

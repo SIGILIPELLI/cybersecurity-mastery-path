@@ -125,6 +125,58 @@ password hashes offline.
 - Restrict who can query AD for service account details (mitigates Kerberoasting reconnaissance).
 - Patch domain controllers promptly — many AD-specific critical CVEs (e.g. Zerologon) exist specifically in DC-facing protocols.
 
+## How It Actually Works: how Kerberos authentication in AD actually proves identity without sending a password
+
+Active Directory's authentication protocol, **Kerberos**, is built entirely
+around one idea: prove you know a secret without ever transmitting it. The
+flow, simplified:
+
+```
+1. AS-REQ:  client → KDC: "I'm alice, requesting a Ticket Granting Ticket"
+            (a timestamp encrypted with a key derived from alice's password
+             hash is included, proving she knows the password without
+             sending it)
+2. AS-REP:  KDC → client: TGT (encrypted with the KDC's own secret key,
+            opaque to the client) + a session key (encrypted with alice's
+            key, so only alice can extract it)
+3. TGS-REQ: client → KDC: "Here's my TGT, I want a ticket for service X"
+4. TGS-REP: KDC → client: a service ticket encrypted with service X's
+            long-term key, containing alice's identity + the session key
+5. AP-REQ:  client → service X: presents the service ticket; service X
+            decrypts it with its OWN key (which only it and the KDC know)
+            and now trusts the identity claim inside, with no network
+            round-trip to the KDC needed at this step
+```
+
+The reason this is more resistant to replay than a simple password check is
+that every ticket is time-bound and every request includes a fresh encrypted
+timestamp ("authenticator") — a captured AP-REQ replayed later fails because
+the service checks the timestamp against its own clock and rejects anything
+outside a small window (typically 5 minutes), which is exactly why domain
+controllers and clients must stay closely time-synchronized for Kerberos to
+function at all.
+
+This same design explains AD's most dangerous attack surface. A
+**Kerberoasting** attack works because any authenticated domain user can
+legitimately *request* a service ticket for any service account (step 3–4
+above, by design — service tickets are meant to be requestable), and that
+ticket is encrypted with the service account's password-derived key; an
+attacker can then crack that encryption offline, at their own leisure, with
+no further contact with the domain controller. It isn't a bug in Kerberos —
+it's a direct consequence of a legitimate protocol feature (any user may
+request tickets for any service) combined with a weak service-account
+password providing insufficient key-derivation strength — which is precisely
+why **credential protection** (long, randomly generated service account
+passwords, or gMSAs that rotate the password automatically every 30 days) is
+the actual mitigation, not a network-layer control. **Golden/Silver ticket**
+attacks push this further: since a TGT's validity rests entirely on being
+encrypted with the KDC's own secret key (derived from the `krbtgt` account's
+password hash), an attacker who steals that one hash can forge a TGT for
+*any* user, with any group membership, entirely offline — which is why
+`krbtgt` password rotation (twice, since the previous hash stays valid for a
+transition window) is the standard remediation after any suspected domain
+compromise.
+
 ## Key terms
 
 | Term | Meaning |

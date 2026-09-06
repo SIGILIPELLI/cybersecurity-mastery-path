@@ -913,6 +913,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-why-sql-injection-and-xss-happen-at-the-parser-level-and-why-parameterization-actually-fixes-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: why SQL injection and XSS happen at the parser level, and why parameterization actually fixes it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2272,6 +2283,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-why-sql-injection-and-xss-happen-at-the-parser-level-and-why-parameterization-actually-fixes-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: why SQL injection and XSS happen at the parser level, and why parameterization actually fixes it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2560,6 +2582,45 @@ strictly separated:</p>
 on: nearly every injection-class vulnerability is a variant of "we let
 attacker-controlled text influence how a downstream interpreter parses
 something."</p>
+<h2 id="how-it-actually-works-why-sql-injection-and-xss-happen-at-the-parser-level-and-why-parameterization-actually-fixes-it">How It Actually Works: why SQL injection and XSS happen at the parser level, and why parameterization actually fixes it<a class="headerlink" href="#how-it-actually-works-why-sql-injection-and-xss-happen-at-the-parser-level-and-why-parameterization-actually-fixes-it" title="Permanent link">&para;</a></h2>
+<p>Both SQL injection and XSS exist for the same underlying reason: a program
+concatenates untrusted data into a string that is then handed to a
+<em>different</em> interpreter (a SQL engine, an HTML/JS renderer), and that
+interpreter has no way to tell "this part is code the developer wrote" from
+"this part is data a user typed" — because by the time it receives the
+string, both look like identical characters.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>query = "SELECT * FROM users WHERE name = '" + input + "'"
+</code></pre></div>
+<p>If <code>input</code> is <code>x' OR '1'='1</code>, the SQL parser tokenizes the final string
+exactly as written — it has no memory of where the developer's string
+literal was "supposed" to end, because that boundary was lost the moment
+concatenation happened. The parser faithfully executes
+<code>WHERE name = 'x' OR '1'='1'</code>, a syntactically valid, semantically different
+query. <strong>Parameterized queries (prepared statements)</strong> fix this by sending
+the query template and the data to the database as two <em>separate</em> messages
+over the wire: the database compiles the SQL structure first — literally
+building a parse tree with placeholder slots — before the parameter values
+ever arrive. Once compiled, those slots are typed data locations, not code
+positions, so a value like <code>x' OR '1'='1</code> is bound as a single literal
+string value to compare against, with the quote character treated as three
+harmless bytes rather than syntax. The vulnerability class doesn't get
+"detected and blocked" — it becomes structurally impossible, because the
+data channel and the code channel are never merged again.</p>
+<p>XSS follows the identical shape one layer up the stack: untrusted input gets
+concatenated into HTML that a browser's parser then tokenizes. If input
+contains <code>&lt;script&gt;</code>, and it lands in a context the parser reads as element
+content, the browser's HTML tokenizer opens a new script-parsing state right
+there — it cannot distinguish "text the developer wrote" from "text a user
+submitted" any more than the SQL parser could. <strong>Output encoding</strong> (escaping
+<code>&lt;</code> to <code>&amp;lt;</code>, <code>"</code> to <code>&amp;quot;</code>, etc., context-appropriately) is the browser
+equivalent of parameterization: it doesn't hide the malicious string, it
+transforms it into a sequence of characters that the parser's grammar can
+only ever interpret as literal text, never as a tag or attribute boundary.
+This is also why context matters enormously — encoding that's correct
+inside an HTML attribute is wrong inside a <code>&lt;script&gt;</code> block or a URL, because
+each of those has a different parser/grammar with different special
+characters, which is exactly why "just escape everything the same way"
+sanitizers keep failing in production.</p>
 <h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

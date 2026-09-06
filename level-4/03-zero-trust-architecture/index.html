@@ -1979,6 +1979,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-a-pdppep-actually-evaluates-never-trust-always-verify-on-every-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how a PDP/PEP actually evaluates "never trust, always verify" on every request
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#8-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2316,6 +2327,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-a-pdppep-actually-evaluates-never-trust-always-verify-on-every-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how a PDP/PEP actually evaluates "never trust, always verify" on every request
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#8-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2443,6 +2465,42 @@ roadmap:</p>
 <p>Vendors selling "zero trust in a box" are selling one component — real
 zero trust is an architectural commitment (Module 1) spanning identity,
 network, device, application, and data controls together.</p>
+<h2 id="how-it-actually-works-how-a-pdppep-actually-evaluates-never-trust-always-verify-on-every-request">How It Actually Works: how a PDP/PEP actually evaluates "never trust, always verify" on every request<a class="headerlink" href="#how-it-actually-works-how-a-pdppep-actually-evaluates-never-trust-always-verify-on-every-request" title="Permanent link">&para;</a></h2>
+<p>The often-repeated zero trust slogan translates into one concrete
+architectural pattern: no request reaches a protected resource without
+first passing through a <strong>Policy Enforcement Point (PEP)</strong> that synchronously
+calls a <strong>Policy Decision Point (PDP)</strong> for a per-request authorization
+decision, evaluated fresh every time rather than cached from a login event.
+Mechanically, this differs from classic perimeter security in exactly one
+structural way: a traditional VPN performs authentication <em>once</em>, at
+connection time, and the network then implicitly trusts everything that
+connection subsequently does; a zero trust PEP intercepts <em>every individual
+request</em> (often literally as a sidecar proxy sitting in front of each
+service) and re-runs a policy evaluation — the same allow/deny model from
+Level 2 Module 8's IAM, but evaluated against live signals: current device
+posture, current network location, current session risk score, current time
+— rather than a single decision made minutes or hours earlier and never
+revisited. This is precisely why compromising one credential doesn't
+automatically grant lateral access in a mature zero trust deployment: the
+stolen credential still has to pass a <em>fresh</em> PDP evaluation at every next
+hop, and if the device posture signal ("is this request coming from the
+originally enrolled, still-compliant device") doesn't match, the PEP denies
+it regardless of how valid the credential itself is.</p>
+<p><strong>Device trust/posture assessment</strong> feeds the PDP concrete, machine-checked
+attributes rather than a human attestation: an installed agent reports disk
+encryption status, patch level, and whether required security agents are
+running, and cryptographically attests this via a hardware root of trust
+(a TPM performing a <strong>remote attestation</strong>: the TPM signs a hash of the
+boot chain's measurements with a key that never leaves the chip, so the
+report cannot be forged by malware running at the OS level, only by
+compromising the boot chain itself before measurement). <strong>Micro-segmentation</strong>
+is the network-layer implementation of the same continuous-verification
+idea from Level 3 Module 1's pivoting discussion: rather than one perimeter
+firewall, every workload-to-workload connection is itself gated by a PEP
+checking service identity (often a cryptographic identity via mutual TLS,
+Level 4 Module 4) rather than IP/subnet membership — which is the specific,
+mechanism-level reason a compromised pivot host's network <em>position</em> stops
+being sufficient for lateral movement once this is in place.</p>
 <h2 id="8-checklist">8. Checklist<a class="headerlink" href="#8-checklist" title="Permanent link">&para;</a></h2>
 <ul>
 <li>[ ] MFA is phishing-resistant (FIDO2/WebAuthn) for privileged access</li>

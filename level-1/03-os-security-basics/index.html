@@ -829,6 +829,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-the-kernel-actually-enforces-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how the kernel actually enforces permissions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2272,6 +2283,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-the-kernel-actually-enforces-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how the kernel actually enforces permissions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2514,6 +2536,47 @@ for a freshly installed machine:</p>
 Benchmarks covers in far more depth — this list is the 80/20 version you'll
 actually apply on your own lab machine in Module 8 and audit in Module 10's
 project.</p>
+<h2 id="how-it-actually-works-how-the-kernel-actually-enforces-permissions">How It Actually Works: how the kernel actually enforces permissions<a class="headerlink" href="#how-it-actually-works-how-the-kernel-actually-enforces-permissions" title="Permanent link">&para;</a></h2>
+<p>Every time a process calls <code>open()</code>, <code>read()</code>, or <code>write()</code> on Linux, that
+call traps into the kernel, which runs a permission check before it ever
+touches the filesystem driver. For a regular file, the check walks the
+inode's mode bits against the calling process's <strong>effective UID/GID</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>if (uid == inode.owner_uid)      check owner rwx bits
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>else if (gid in process.groups)  check group rwx bits
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>else                              check "other" rwx bits
+</code></pre></div>
+<p>This is enforced entirely in kernel space — a user-space program cannot
+"convince" the kernel it has a different UID; the UID lives in the process's
+<code>task_struct</code> and is only changed by kernel-mediated syscalls like <code>setuid()</code>,
+themselves gated by capability checks (<code>CAP_SETUID</code>). This is also why a
+<strong>SUID bit</strong> is powerful and dangerous: when set on an executable, the
+kernel temporarily sets the running process's effective UID to the file
+owner's UID (often root) for the duration of execution, regardless of who
+launched it — the mechanism legitimate tools like <code>passwd</code> rely on to let
+any user edit a root-owned file through a narrow, audited code path, and
+exactly the mechanism attackers hunt for in misconfigured SUID binaries that
+skip proper input validation.</p>
+<p>Windows enforces access differently but on the same principle: every
+securable object (file, registry key, process) carries a <strong>Security
+Descriptor</strong> containing a <strong>DACL</strong> (Discretionary Access Control List) — an
+ordered list of Access Control Entries, each naming a SID (Security
+Identifier) and an allow/deny permission mask. When a process tries to open
+an object, the kernel's Security Reference Monitor compares the requesting
+token's SIDs against the DACL <strong>in order</strong>, stopping at the first matching
+entry — which is why an explicit Deny ACE placed before an Allow ACE always
+wins, even if the Allow looks more specific. <strong>UAC</strong> layers on top of this:
+an administrator's logon actually creates two tokens, a full-privilege one
+and a filtered "standard user" one with admin SIDs marked deny-only: normal
+processes get the filtered token by default, and only an explicit elevation
+prompt swaps in the full token for that one process — least privilege
+enforced structurally, not just by policy.</p>
+<p><strong>Patch management</strong> matters at this same layer because most memory-safety
+CVEs (buffer overflows, use-after-free) are exploited by corrupting kernel or
+process memory to hijack a return address or function pointer — a patch
+typically adds a bounds check or reorders a free so the corrupted-memory
+window no longer exists, which is why an unpatched but otherwise
+well-configured system can still be fully compromised by a single
+network-reachable input.</p>
 <h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

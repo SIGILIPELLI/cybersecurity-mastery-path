@@ -1951,6 +1951,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-baselineanomaly-hunting-actually-computes-normal-and-why-hunting-finds-what-rules-miss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how baseline/anomaly hunting actually computes "normal," and why hunting finds what rules miss
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#8-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2316,6 +2327,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-baselineanomaly-hunting-actually-computes-normal-and-why-hunting-finds-what-rules-miss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how baseline/anomaly hunting actually computes "normal," and why hunting finds what rules miss
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#8-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2440,6 +2462,41 @@ next quarter with no institutional memory:</p>
 <a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>Outcome: New Sigma rule created for anomalous WMI use outside allowlist;
 <a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  ATT&amp;CK T1047 coverage moved from "none" to "detected"
 </code></pre></div>
+<h2 id="how-it-actually-works-how-baselineanomaly-hunting-actually-computes-normal-and-why-hunting-finds-what-rules-miss">How It Actually Works: how baseline/anomaly hunting actually computes "normal," and why hunting finds what rules miss<a class="headerlink" href="#how-it-actually-works-how-baselineanomaly-hunting-actually-computes-normal-and-why-hunting-finds-what-rules-miss" title="Permanent link">&para;</a></h2>
+<p><strong>Data-driven hunting</strong> works by building a statistical model of normal
+behavior per entity (per host, per user, per process) and flagging
+<em>deviation</em>, rather than matching a known-bad pattern the way a SIEM
+correlation rule does. Concretely, for something like process-execution
+frequency, a hunter (or the tooling supporting the hunt) computes a
+baseline distribution — mean and standard deviation of "how many distinct
+child processes does <code>explorer.exe</code> normally spawn per hour, per host" over
+a trailing window — and flags observations several standard deviations
+outside that baseline as candidates. This is a fundamentally different
+detection mechanism than the signature/correlation approach from Level 2–3's
+SIEM modules: a correlation rule can only ever catch behavior someone
+already characterized as bad; an anomaly baseline catches <em>anything
+statistically unusual</em>, including techniques nobody has written a rule for
+yet, at the cost of needing a human analyst to judge whether a given
+anomaly is actually malicious rather than a false positive from a legitimate
+but rare event (a scheduled batch job, an admin's unusual-but-authorized
+session).</p>
+<p>This is the precise, mechanistic reason <strong>hunting finds things alerting
+doesn't</strong>: a correlation rule requires the "IF condition" to be specified
+<em>before</em> the attack happens; a hunt hypothesis (section 3) is formed <em>after</em>
+observing intelligence about a new technique (Level 3 Module 4's threat
+intel feeding directly into this), and is tested by an analyst manually
+querying historical data for the specific ATT&amp;CK-mapped telemetry signature
+that technique would leave — meaning a hunt can retroactively find an
+intrusion that occurred <em>before</em> any rule existed to catch it, as long as
+the raw telemetry was retained (tying directly back to Level 2 Module 6's
+retention discussion: a hunt is only as good as how far back the index
+actually goes). <strong>Kill-chain-based hunting</strong> structures this further by
+hypothesizing at each of the seven classic stages (reconnaissance through
+actions-on-objective) independently, because a technique's telemetry
+footprint and the baseline of "normal" both differ enormously stage to
+stage — DNS query volume anomalies matter for command-and-control hunting
+in a way they're irrelevant for a privilege-escalation hunt, which looks
+instead at token/permission-change telemetry.</p>
 <h2 id="8-checklist">8. Checklist<a class="headerlink" href="#8-checklist" title="Permanent link">&para;</a></h2>
 <ul>
 <li>[ ] Hunts are hypothesis-driven and mapped to specific ATT&amp;CK techniques</li>

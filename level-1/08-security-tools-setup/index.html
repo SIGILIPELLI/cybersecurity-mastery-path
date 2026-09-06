@@ -975,6 +975,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-what-nmap-wireshark-and-iptables-are-actually-doing-to-the-packets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: what nmap, Wireshark, and iptables are actually doing to the packets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2284,6 +2295,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-what-nmap-wireshark-and-iptables-are-actually-doing-to-the-packets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: what nmap, Wireshark, and iptables are actually doing to the packets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2559,6 +2581,45 @@ VM, which is exactly why testing firewall rules on a disposable VM
 (section 1) rather than a machine you depend on is the right approach
 while learning.</p>
 </div>
+<h2 id="how-it-actually-works-what-nmap-wireshark-and-iptables-are-actually-doing-to-the-packets">How It Actually Works: what nmap, Wireshark, and iptables are actually doing to the packets<a class="headerlink" href="#how-it-actually-works-what-nmap-wireshark-and-iptables-are-actually-doing-to-the-packets" title="Permanent link">&para;</a></h2>
+<p><strong>nmap's</strong> default SYN scan (<code>-sS</code>) works by exploiting the TCP state
+machine directly rather than completing real connections: it sends a raw SYN
+packet to each target port and inspects only the response, never finishing
+the handshake — a <strong>SYN-ACK</strong> response means the port is open (something is
+listening and willing to accept a connection), an <strong>RST</strong> means closed
+(nothing is listening, but the host is up and answering), and no response at
+all (after retransmits) typically means a firewall is silently dropping the
+packet, which nmap reports as "filtered." Because it never sends the final
+ACK, the connection never completes and the OS on the scanning machine never
+allocates a socket for it — this is why it's called a "half-open" scan and
+why it used to evade connection-logging on older systems that only logged
+fully established sessions.</p>
+<p><strong>Wireshark</strong> doesn't intercept traffic in the normal sense — it asks the
+network interface driver to enter <strong>promiscuous mode</strong>, which disables the
+NIC's default behavior of silently discarding any Ethernet frame whose
+destination MAC address isn't its own. In promiscuous mode, every frame that
+physically reaches the NIC (on a hub, literally all traffic on the segment;
+on a switch, only broadcast/multicast traffic and whatever's addressed to
+you, unless you also configure port mirroring/SPAN) gets passed up to
+Wireshark's capture engine, which uses <code>libpcap</code>/<code>npcap</code> to attach a
+BPF (Berkeley Packet Filter) — a tiny bytecode program compiled from your
+capture filter expression — directly in the kernel, so filtering happens
+before packets are copied into user space at all, which is why capture
+filters are dramatically cheaper than display filters applied after the
+fact.</p>
+<p><strong>iptables</strong> rules are evaluated by walking an ordered chain of rules
+top-to-bottom for each packet, at specific hook points in the kernel's
+network stack (<code>PREROUTING</code>, <code>INPUT</code>, <code>FORWARD</code>, <code>OUTPUT</code>, <code>POSTROUTING</code> —
+the Netfilter hooks). The first rule whose match conditions (source IP,
+destination port, protocol, connection state) are all true determines the
+packet's fate immediately — evaluation stops at that rule, which is exactly
+why rule <em>order</em> changes behavior even when the rule set's content doesn't:
+a broad <code>ACCEPT</code> placed before a specific <code>DROP</code> makes the <code>DROP</code>
+unreachable for those packets. The <code>-m state --state ESTABLISHED,RELATED</code>
+match some rules use hooks into the same connection-tracking table
+(<code>conntrack</code>) that a stateful firewall builds by watching the TCP handshake
+described in Module 2 — it's the same mechanism, exposed as a match
+condition you can write rules against directly.</p>
 <h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

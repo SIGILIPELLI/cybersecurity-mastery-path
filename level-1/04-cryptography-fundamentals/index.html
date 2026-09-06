@@ -880,6 +880,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-what-makes-a-hash-collision-resistant-and-how-the-tls-handshake-actually-negotiates-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: what makes a hash collision-resistant, and how the TLS handshake actually negotiates keys
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2318,6 +2329,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-what-makes-a-hash-collision-resistant-and-how-the-tls-handshake-actually-negotiates-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: what makes a hash collision-resistant, and how the TLS handshake actually negotiates keys
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2574,6 +2596,48 @@ view the certificate. You'll see the domain it's issued for, the issuing
 CA, the validity dates, and (if you dig into details) the public key
 algorithm — RSA or ECDSA — all concepts from this module made concrete.</p>
 </div>
+<h2 id="how-it-actually-works-what-makes-a-hash-collision-resistant-and-how-the-tls-handshake-actually-negotiates-keys">How It Actually Works: what makes a hash collision-resistant, and how the TLS handshake actually negotiates keys<a class="headerlink" href="#how-it-actually-works-what-makes-a-hash-collision-resistant-and-how-the-tls-handshake-actually-negotiates-keys" title="Permanent link">&para;</a></h2>
+<p>A cryptographic hash function like SHA-256 processes input in fixed-size
+blocks (512 bits) through a <strong>compression function</strong> applied iteratively
+(the Merkle–Damgård construction): each block is mixed into a running state
+using bitwise rotations, XORs, and modular additions specifically chosen so
+that flipping a single input bit changes roughly half the output bits (the
+<strong>avalanche effect</strong>) — this is why hashes look "random" even though they're
+fully deterministic. Collision resistance isn't a proof that no two inputs
+ever produce the same 256-bit output (with a 256-bit output space and
+unlimited possible inputs, collisions must exist by pigeonhole) — it's a
+claim about <em>computational</em> infeasibility: the best known attack still
+requires roughly 2^128 hash evaluations to find one (the birthday bound),
+which at billions of hashes per second per GPU is still longer than the age
+of the universe. This is why MD5 (broken in ~2^18 operations) and SHA-1
+(broken in ~2^63) are deprecated — not because their math is different in
+kind, but because cryptanalysis found shortcuts in their specific
+compression function that shrink that number to something reachable.</p>
+<p>TLS combines all three primitives from this module in one handshake, and the
+sequencing matters:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>1. ClientHello   → client offers supported cipher suites + random nonce
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>2. ServerHello   → server picks a suite, sends its certificate (public key)
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>3. Key exchange  → both sides derive the SAME symmetric session key using
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>                    asymmetric math (commonly ECDHE: Elliptic Curve
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                    Diffie-Hellman, Ephemeral) — without ever transmitting
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                    the key itself over the wire
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>4. Finished      → both sides send a hash (HMAC) of the entire handshake
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                    transcript so far, encrypted under the new key
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>5. Application data → now flows encrypted under the fast symmetric cipher
+</code></pre></div>
+<p>The reason step 3 uses asymmetric crypto only to <em>establish</em> a key, then
+switches to symmetric encryption for the actual data, is pure performance:
+asymmetric operations (modular exponentiation over large primes, or point
+multiplication on an elliptic curve) cost orders of magnitude more CPU per
+byte than symmetric ciphers like AES, which are simple enough to have
+dedicated CPU instructions (AES-NI). The "E" in ECDHE (ephemeral) means a
+fresh key pair is generated for every single handshake and discarded
+afterward — so even if an attacker later steals the server's long-term
+private key, they cannot decrypt previously captured traffic, because that
+traffic's session key was never derived from the long-term key in the first
+place. This property is called <strong>forward secrecy</strong>, and it's the concrete
+reason "record everything now, decrypt later" doesn't work against a
+correctly configured modern TLS deployment.</p>
 <h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2626,19 +2690,19 @@ on Windows use WSL or Git Bash.</p>
 </li>
 <li>
 <p><strong>Symmetric encryption round-trip.</strong> Encrypt and decrypt a file with AES:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>openssl<span class="w"> </span>enc<span class="w"> </span>-aes-256-cbc<span class="w"> </span>-pbkdf2<span class="w"> </span>-salt<span class="w"> </span>-in<span class="w"> </span>secret.txt<span class="w"> </span>-out<span class="w"> </span>secret.enc
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>openssl<span class="w"> </span>enc<span class="w"> </span>-aes-256-cbc<span class="w"> </span>-pbkdf2<span class="w"> </span>-d<span class="w"> </span>-salt<span class="w"> </span>-in<span class="w"> </span>secret.enc<span class="w"> </span>-out<span class="w"> </span>secret_decrypted.txt
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>diff<span class="w"> </span>secret.txt<span class="w"> </span>secret_decrypted.txt<span class="w">   </span><span class="c1"># should show no difference</span>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>openssl<span class="w"> </span>enc<span class="w"> </span>-aes-256-cbc<span class="w"> </span>-pbkdf2<span class="w"> </span>-salt<span class="w"> </span>-in<span class="w"> </span>secret.txt<span class="w"> </span>-out<span class="w"> </span>secret.enc
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>openssl<span class="w"> </span>enc<span class="w"> </span>-aes-256-cbc<span class="w"> </span>-pbkdf2<span class="w"> </span>-d<span class="w"> </span>-salt<span class="w"> </span>-in<span class="w"> </span>secret.enc<span class="w"> </span>-out<span class="w"> </span>secret_decrypted.txt
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>diff<span class="w"> </span>secret.txt<span class="w"> </span>secret_decrypted.txt<span class="w">   </span><span class="c1"># should show no difference</span>
 </code></pre></div>
    Then try decrypting with a deliberately wrong password and record what
    happens.</p>
 </li>
 <li>
 <p><strong>Generate a key pair and sign something.</strong>
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>openssl<span class="w"> </span>genpkey<span class="w"> </span>-algorithm<span class="w"> </span>RSA<span class="w"> </span>-out<span class="w"> </span>private.pem<span class="w"> </span>-pkeyopt<span class="w"> </span>rsa_keygen_bits:2048
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>openssl<span class="w"> </span>rsa<span class="w"> </span>-pubout<span class="w"> </span>-in<span class="w"> </span>private.pem<span class="w"> </span>-out<span class="w"> </span>public.pem
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>openssl<span class="w"> </span>dgst<span class="w"> </span>-sha256<span class="w"> </span>-sign<span class="w"> </span>private.pem<span class="w"> </span>-out<span class="w"> </span>signature.bin<span class="w"> </span>secret.txt
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>openssl<span class="w"> </span>dgst<span class="w"> </span>-sha256<span class="w"> </span>-verify<span class="w"> </span>public.pem<span class="w"> </span>-signature<span class="w"> </span>signature.bin<span class="w"> </span>secret.txt
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>openssl<span class="w"> </span>genpkey<span class="w"> </span>-algorithm<span class="w"> </span>RSA<span class="w"> </span>-out<span class="w"> </span>private.pem<span class="w"> </span>-pkeyopt<span class="w"> </span>rsa_keygen_bits:2048
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>openssl<span class="w"> </span>rsa<span class="w"> </span>-pubout<span class="w"> </span>-in<span class="w"> </span>private.pem<span class="w"> </span>-out<span class="w"> </span>public.pem
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>openssl<span class="w"> </span>dgst<span class="w"> </span>-sha256<span class="w"> </span>-sign<span class="w"> </span>private.pem<span class="w"> </span>-out<span class="w"> </span>signature.bin<span class="w"> </span>secret.txt
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>openssl<span class="w"> </span>dgst<span class="w"> </span>-sha256<span class="w"> </span>-verify<span class="w"> </span>public.pem<span class="w"> </span>-signature<span class="w"> </span>signature.bin<span class="w"> </span>secret.txt
 </code></pre></div>
    Confirm it prints <code>Verified OK</code>. Then modify <code>secret.txt</code> by one character
    and re-run the verify step — record what happens and explain why in terms

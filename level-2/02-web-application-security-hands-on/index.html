@@ -1177,6 +1177,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-an-intercepting-proxy-sits-inside-https-and-what-an-automated-scanner-can-and-cant-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how an intercepting proxy sits inside HTTPS, and what an automated scanner can and can't see
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2272,6 +2283,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-an-intercepting-proxy-sits-inside-https-and-what-an-automated-scanner-can-and-cant-see" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how an intercepting proxy sits inside HTTPS, and what an automated scanner can and can't see
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2440,6 +2462,40 @@ include:</p>
 <p>This format — Title / Severity / Location / Description / Reproduction /
 Impact / Remediation — is the backbone of every real pentest report you'll
 write in this course (see Level 2 Module 10 and Level 3 Module 10).</p>
+<h2 id="how-it-actually-works-how-an-intercepting-proxy-sits-inside-https-and-what-an-automated-scanner-can-and-cant-see">How It Actually Works: how an intercepting proxy sits inside HTTPS, and what an automated scanner can and can't see<a class="headerlink" href="#how-it-actually-works-how-an-intercepting-proxy-sits-inside-https-and-what-an-automated-scanner-can-and-cant-see" title="Permanent link">&para;</a></h2>
+<p>An intercepting proxy (Burp Suite, ZAP) reading and modifying HTTPS traffic
+without breaking encryption sounds like it should be impossible — TLS exists
+specifically to prevent a middle party from reading traffic. The trick is
+that the proxy doesn't break your browser's TLS session with the server; it
+terminates <em>two separate</em> TLS connections: browser-to-proxy and
+proxy-to-server, presenting the browser with its <strong>own</strong> certificate for
+each site, signed by a CA certificate it generated locally. Your browser
+only accepts that certificate because you manually installed the proxy's CA
+certificate into your OS/browser trust store during setup — that one step is
+the entire mechanism, and it's exactly why this only works on traffic you
+control the endpoint for: a proxy cannot intercept a connection unless the
+client trusts its substitute certificate, which is also precisely why the
+same technique fails (by design) against a phone you haven't rooted or a
+service using <strong>certificate pinning</strong>, where the app hardcodes which exact
+certificate (or public key) it will accept and ignores the OS trust store
+entirely.</p>
+<p><strong>Automated scanners</strong> work by combining a crawler (which discovers URLs and
+forms by parsing HTML/JS and following links) with an <strong>active fuzzing
+engine</strong> that resubmits each discovered parameter with a library of
+known-bad payloads (<code>' OR '1'='1</code>, <code>&lt;script&gt;alert(1)&lt;/script&gt;</code>, path
+traversal sequences) and inspects the response for signatures of success —
+a SQL error string, a reflected unescaped payload, an anomalous response
+time (for blind/time-based injection, where the payload contains something
+like <code>SLEEP(5)</code> and the scanner just measures whether the response took ~5
+seconds longer). This is mechanically why scanners are strong at <em>known
+pattern</em> classes (injection, XSS) and structurally blind to <strong>business logic
+flaws</strong> (a discount code appliable twice, a price parameter trusted from the
+client) — those aren't malformed input at all, every request is
+syntactically valid and passes every generic payload check; detecting them
+requires understanding what the <em>feature</em> is supposed to do, which is a
+semantic judgment no generic fuzzer's success oracle can make. This is the
+concrete, mechanism-level reason human manual testing (Module 4) can never
+be fully replaced by scanning, not just a hedge from the text.</p>
 <h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

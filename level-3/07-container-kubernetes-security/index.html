@@ -1715,6 +1715,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-what-actually-isolates-a-container-and-how-kubernetes-network-policy-is-enforced-in-the-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: what actually isolates a container, and how Kubernetes network policy is enforced in the kernel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#8-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2316,6 +2327,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-what-actually-isolates-a-container-and-how-kubernetes-network-policy-is-enforced-in-the-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: what actually isolates a container, and how Kubernetes network policy is enforced in the kernel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#8-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2494,6 +2516,47 @@ relying on raw Kubernetes Secrets for high-value credentials.</p>
 <a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">=(securityContext)</span><span class="p">:</span>
 <a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">                  </span><span class="nt">=(privileged)</span><span class="p">:</span><span class="w"> </span><span class="s">"false"</span>
 </code></pre></div>
+<h2 id="how-it-actually-works-what-actually-isolates-a-container-and-how-kubernetes-network-policy-is-enforced-in-the-kernel">How It Actually Works: what actually isolates a container, and how Kubernetes network policy is enforced in the kernel<a class="headerlink" href="#how-it-actually-works-what-actually-isolates-a-container-and-how-kubernetes-network-policy-is-enforced-in-the-kernel" title="Permanent link">&para;</a></h2>
+<p>A container is not a lightweight VM — it's a set of ordinary Linux processes
+made to <em>look</em> isolated using three independent kernel features, and
+understanding this is what makes "container escape" concrete rather than
+mysterious. <strong>Namespaces</strong> give a process its own view of a global resource:
+a PID namespace makes a container's process see itself as PID 1 with no
+visibility into host processes; a mount namespace gives it its own
+filesystem root; a network namespace gives it its own interfaces and
+routing table. <strong>Cgroups</strong> (control groups) limit and account for resource
+usage (CPU shares, memory ceilings) — the mechanism behind
+<code>--memory=512m</code>. Neither of these is a security boundary in the way a
+hypervisor is: both features change what a process <em>can see or is limited to
+consuming</em>, not what it fundamentally has permission to do. That's the third
+piece — <strong>capabilities and seccomp</strong>: by default a container process still
+runs as a Linux process subject to the same DACL/capability checks from
+Level 1 Module 3, and a container escape typically means the containerized
+process retained a capability (like <code>CAP_SYS_ADMIN</code>, or running genuinely as
+UID 0 with no user-namespace remapping) that lets it perform an operation —
+mounting the host filesystem, loading a kernel module — that reaches outside
+its namespace's intended view and touches the shared, single kernel every
+container on that host actually runs on. Runtime hardening (seccomp
+profiles, dropping capabilities, <code>readOnlyRootFilesystem</code>) works by removing
+exactly the syscalls and capabilities a given workload doesn't need, shrinking
+this shared-kernel attack surface to only what's actually required.</p>
+<p><strong>Kubernetes NetworkPolicy</strong> resources don't do the actual packet filtering
+themselves — they're a declarative spec that the cluster's CNI plugin (Calico,
+Cilium) compiles down into the same kernel-level packet filtering primitives
+covered earlier: iptables rules or, in eBPF-based CNIs, small verified
+programs attached at kernel hook points that run per-packet with near-native
+speed. A "default-deny" NetworkPolicy is enforced by the CNI installing a
+DROP rule matching all pod-to-pod traffic in that namespace, then adding
+specific ALLOW rules only for the explicitly permitted pod-selector pairs
+— structurally identical to the iptables ordered-chain evaluation from Level
+1 Module 8, just auto-generated and continuously reconciled from the
+Kubernetes API object instead of hand-written. RBAC on the API server itself
+enforces a third, independent layer above the network: every API request
+carries the caller's authenticated identity, and the API server evaluates it
+against Role/RoleBinding objects using the identical allow-only,
+default-deny evaluation model as cloud IAM (Level 2 Module 8) — meaning a
+compromised pod that has no ServiceAccount token bound to any RoleBinding
+simply cannot call the API server at all, regardless of network reachability.</p>
 <h2 id="8-checklist">8. Checklist<a class="headerlink" href="#8-checklist" title="Permanent link">&para;</a></h2>
 <ul>
 <li>[ ] Images built from minimal base images, scanned in CI, non-root by default</li>

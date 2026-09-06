@@ -2119,6 +2119,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-tiered-triage-and-coverage-staffing-math-are-actually-derived-from-queueing-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how tiered triage and coverage staffing math are actually derived from queueing behavior
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#8-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2316,6 +2327,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-tiered-triage-and-coverage-staffing-math-are-actually-derived-from-queueing-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how tiered triage and coverage staffing math are actually derived from queueing behavior
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#8-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2437,6 +2459,40 @@ between triage and hunting/project work, cap consecutive night shifts,
 invest in tooling that reduces noise (Level 3 Module 5's tuning work
 directly reduces analyst fatigue), and build a real career ladder so
 tier-1 is a stepping stone, not a dead end.</p>
+<h2 id="how-it-actually-works-how-tiered-triage-and-coverage-staffing-math-are-actually-derived-from-queueing-behavior">How It Actually Works: how tiered triage and coverage staffing math are actually derived from queueing behavior<a class="headerlink" href="#how-it-actually-works-how-tiered-triage-and-coverage-staffing-math-are-actually-derived-from-queueing-behavior" title="Permanent link">&para;</a></h2>
+<p>A SOC's tiered structure (Tier 1 triage, Tier 2 investigation, Tier 3
+hunting/engineering) is a direct application of <strong>queueing theory</strong> to alert
+volume: Tier 1 acts as a fast, high-throughput filter applying the same
+correlation-rule logic from Level 2 Module 6 by hand — closing the large
+share of alerts that are false positives or low-severity known patterns in a
+few minutes each — specifically so that the much smaller, much more
+time-expensive investigation and hunting capacity at Tier 2/3 isn't consumed
+by high-volume, low-complexity noise. This is a queueing-system design
+choice: if every alert were routed directly to a senior analyst capable of
+full investigation, the system's effective throughput would be bounded by
+the slowest, most expensive service time for <em>every</em> alert regardless of its
+actual complexity, and the queue would grow unboundedly under any realistic
+alert volume — tiering exists to match each alert to the cheapest capacity
+tier that can actually resolve it.</p>
+<p><strong>Coverage staffing math</strong> for 24/7 operations is a direct constraint from
+the calendar, not a policy choice: covering 168 hours/week with analysts who
+each work roughly 40 hours/week requires a minimum of 168/40 ≈ 4.2 full-time
+equivalents <em>before</em> accounting for time off, training, and the standard
+practice of overlapping shift handoffs (so that the outgoing analyst can
+verbally brief the incoming one on any open investigation, since alert
+context that lives only in one analyst's head is lost the instant they walk
+away otherwise) — which is why real-world 24/7 single-shift coverage
+typically needs 5–6 FTEs per seat, not 4, and why "we'll just hire 3 people
+for round-the-clock coverage" reliably fails: it doesn't have enough people
+above the hard 4.2-FTE floor to survive any single person's vacation or sick
+day. <strong>Metrics</strong> like MTTD (mean time to detect) and MTTR (mean time to
+respond) matter mechanically because they're the two variables that
+directly multiply into total exposure window (<code>MTTD + MTTR</code> = time an
+attacker has to act between initial compromise and full containment) — every
+process and tooling investment discussed in this module (better correlation
+rules, tiering, runbooks) is ultimately justified by which of those two
+numbers it reduces, and by how much, which is why serious SOC metrics
+programs track them as the primary KPIs rather than raw alert-closure counts.</p>
 <h2 id="8-checklist">8. Checklist<a class="headerlink" href="#8-checklist" title="Permanent link">&para;</a></h2>
 <ul>
 <li>[ ] Operating model (in-house/MSSP/hybrid) matches actual coverage needs and budget</li>

@@ -773,6 +773,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-risk-scoring-under-the-hood" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: risk scoring under the hood
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2272,6 +2283,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-risk-scoring-under-the-hood" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: risk scoring under the hood
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2586,6 +2608,37 @@ every architecture you'll see in this program.</p>
 firewall rule <em>plus</em> an unpatched server <em>plus</em> no monitoring <em>plus</em> no
 backups is a company-ending event. Every layer you add is another chance to
 catch or contain a problem before it becomes the latter.</p>
+<h2 id="how-it-actually-works-risk-scoring-under-the-hood">How It Actually Works: risk scoring under the hood<a class="headerlink" href="#how-it-actually-works-risk-scoring-under-the-hood" title="Permanent link">&para;</a></h2>
+<p>"High/medium/low risk" in a report is usually the human-readable output of a
+scoring model, not a gut feeling. The most widely used one, <strong>CVSS (Common
+Vulnerability Scoring System)</strong>, computes a 0–10 score from metrics grouped
+into a base equation roughly shaped like:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Base Score = f( Exploitability metrics, Impact metrics )
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Exploitability = f(Attack Vector, Attack Complexity, Privileges Required,
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>                    User Interaction)
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Impact         = f(Confidentiality, Integrity, Availability loss)
+</code></pre></div>
+<p>Each metric is an enumerated value (e.g., Attack Vector: Network / Adjacent /
+Local / Physical) that maps to a fixed numeric weight defined in the CVSS
+specification; the formula combines them with fixed coefficients derived so
+that a network-reachable, no-auth-required, high-impact flaw lands near 9–10,
+while a local, high-complexity, low-impact one lands near 2–3. This is why two
+analysts scoring the same CVE independently converge on nearly the same
+number — it isn't opinion, it's a deterministic function of metric values,
+which is also why the "Risk ≈ Threat × Vulnerability × Impact" mental model
+above has a real, computable cousin in production tooling.</p>
+<p>Underneath <em>threat</em> modeling specifically, frameworks like <strong>STRIDE</strong>
+(Spoofing, Tampering, Repudiation, Information disclosure, Denial of service,
+Elevation of privilege) work by walking a system's data-flow diagram edge by
+edge and asking, for each of the six categories, "does this trust boundary
+allow this?" A trust boundary is any point where data crosses from a
+lower-privilege context into a higher-privilege one (browser → server,
+user → root, one microservice → another) — and it's specifically at these
+boundaries that validation, authentication, and authorization checks must
+exist, because everywhere <em>inside</em> a trust boundary the components already
+trust each other by construction. Mapping trust boundaries first, then
+threats, is why professional threat models are diagrams before they are
+prose.</p>
 <h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

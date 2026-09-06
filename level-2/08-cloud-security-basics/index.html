@@ -1378,6 +1378,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-iam-policy-evaluation-actually-decides-allowdeny-and-how-a-public-bucket-becomes-public" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how IAM policy evaluation actually decides allow/deny, and how a "public" bucket becomes public
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2338,6 +2349,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-iam-policy-evaluation-actually-decides-allowdeny-and-how-a-public-bucket-becomes-public" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how IAM policy evaluation actually decides allow/deny, and how a "public" bucket becomes public
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2492,6 +2514,49 @@ configuration instead of OS settings.</p>
 <li>[ ] CloudTrail (or equivalent) enabled account-wide, logs shipped off-account</li>
 <li>[ ] Access keys rotated regularly; long-lived keys avoided in favor of roles</li>
 </ul>
+<h2 id="how-it-actually-works-how-iam-policy-evaluation-actually-decides-allowdeny-and-how-a-public-bucket-becomes-public">How It Actually Works: how IAM policy evaluation actually decides allow/deny, and how a "public" bucket becomes public<a class="headerlink" href="#how-it-actually-works-how-iam-policy-evaluation-actually-decides-allowdeny-and-how-a-public-bucket-becomes-public" title="Permanent link">&para;</a></h2>
+<p>Cloud IAM systems (AWS IAM is the canonical example) evaluate every API call
+against <strong>every</strong> policy attached to the caller — identity-based policies on
+the user/role, resource-based policies on the target object, permission
+boundaries, and service control policies at the organization level — and
+combine them with a specific, deterministic precedence:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>1. Start with an implicit DENY (default-deny: nothing is allowed unless
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>   something explicitly grants it)
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>2. If ANY applicable statement is an explicit DENY → final result is DENY,
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>   full stop, evaluation ends immediately
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>3. Otherwise, if ANY applicable statement is an explicit ALLOW → ALLOW
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>4. Otherwise → implicit DENY (nothing matched)
+</code></pre></div>
+<p>The critical, frequently-misunderstood consequence is step 2: an explicit
+<code>Deny</code> anywhere in the union of applicable policies overrides <em>every</em> other
+<code>Allow</code>, regardless of how specific or how recently attached that <code>Allow</code>
+is — there is no "most specific rule wins" tie-break like some firewall
+systems use; deny is absolute. This is exactly why permission boundaries
+work as a safety net: attaching a boundary that denies everything except an
+explicit list caps what any identity-based policy can grant, no matter how
+permissive someone later makes that identity's own policy.</p>
+<p>A storage bucket becomes "public" through the same evaluation, applied to a
+<strong>resource-based policy</strong> instead of an identity: a bucket policy or ACL
+that grants <code>s3:GetObject</code> to principal <code>"*"</code> (meaning "any AWS principal,
+authenticated or not") passes step 3 for literally anyone who requests it,
+because the policy engine has no way to distinguish "the whole internet" from
+"a specific role" once the principal field is a wildcard — <code>*</code> is not a
+special "restricted" value to the evaluator, it's just a principal value
+that happens to match every request. This is why automated cloud posture
+tools work by statically enumerating every resource policy and flagging any
+statement whose <code>Principal</code> or <code>Condition</code> fields resolve to an unrestricted
+set — they're running the same allow/deny evaluation algorithm offline,
+against every possible caller, rather than waiting to see if an actual
+unauthorized request happens.</p>
+<p><strong>Encryption at rest</strong> in most cloud platforms uses <strong>envelope encryption</strong>:
+your data is encrypted with a randomly generated <strong>data key</strong>, and that data
+key itself is encrypted with a separate, centrally managed <strong>customer master
+key (CMK)</strong> that never leaves the cloud provider's key management service.
+This two-layer structure exists so that revoking or rotating the CMK
+re-secures every object without re-encrypting the (potentially petabyte-scale)
+data itself — only the much smaller encrypted data keys need to be
+re-wrapped, which is the entire reason "rotate keys" is operationally cheap
+at cloud scale.</p>
 <h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

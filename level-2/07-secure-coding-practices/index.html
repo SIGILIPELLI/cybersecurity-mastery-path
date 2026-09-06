@@ -1350,6 +1350,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-static-analysis-actually-finds-bugs-without-running-the-code-and-why-allowlists-are-provably-stronger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how static analysis actually finds bugs without running the code, and why allowlists are provably stronger
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2338,6 +2349,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-static-analysis-actually-finds-bugs-without-running-the-code-and-why-allowlists-are-provably-stronger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how static analysis actually finds bugs without running the code, and why allowlists are provably stronger
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2503,6 +2525,40 @@ inject malicious code into thousands of downstream apps that "just ran
 Semgrep catch a large fraction of the checklist automatically, on every
 commit, in CI — freeing manual review to focus on business logic and
 authorization, which tools can't reason about.</p>
+<h2 id="how-it-actually-works-how-static-analysis-actually-finds-bugs-without-running-the-code-and-why-allowlists-are-provably-stronger">How It Actually Works: how static analysis actually finds bugs without running the code, and why allowlists are provably stronger<a class="headerlink" href="#how-it-actually-works-how-static-analysis-actually-finds-bugs-without-running-the-code-and-why-allowlists-are-provably-stronger" title="Permanent link">&para;</a></h2>
+<p><strong>Static analysis</strong> tools find vulnerabilities by building an internal
+representation of your code — an <strong>Abstract Syntax Tree</strong>, then a <strong>control
+flow graph</strong> (every possible path execution can take through the function),
+then a <strong>data flow graph</strong> tracking how values move between variables along
+those paths — and then performing what's called <strong>taint analysis</strong>: marking
+every value that originates from an untrusted source (<code>request.params</code>,
+<code>request.body</code>, a file read) as "tainted," and symbolically propagating that
+taint label through every assignment and function call along every path in
+the control flow graph. If a tainted value reaches a <strong>sink</strong> — a
+function known to be dangerous with untrusted input, like a raw SQL
+execution call or <code>eval()</code> — without passing through a recognized
+<strong>sanitizer</strong> (a parameterization call, an escaping function) on every path
+that reaches it, the tool flags it. This is precisely why static analysis
+produces false positives when it can't statically resolve a code path (e.g.,
+input passed through a custom validation function it doesn't recognize as a
+sanitizer) — it isn't reading intent, it's exhaustively enumerating paths
+through a graph and checking a label-propagation invariant.</p>
+<p><strong>Allowlist vs. denylist validation</strong> has a real provable asymmetry, not
+just a stylistic preference. A denylist is a function
+<code>is_safe(input) = NOT input.matches(known_bad_patterns)</code> — it can only ever
+be as complete as the set of bad patterns someone thought to enumerate, and
+the space of "ways to encode a <code>&lt;script&gt;</code> tag" (case variation, null bytes,
+UTF-7 encoding, HTML entity encoding, double-encoding) is open-ended, so a
+denylist is fundamentally a race against an attacker's creativity in
+encoding. An allowlist is <code>is_safe(input) = input.matches(known_good_pattern)</code>
+— a <strong>closed, finite specification</strong> (e.g., "exactly one to twenty
+alphanumeric characters") that every possible input either satisfies or
+doesn't, with no encoding trick able to sneak a value outside the pattern
+past a correctly anchored regex (<code>^[A-Za-z0-9]{1,20}$</code>), because the check
+constrains the <em>entire</em> string, not just the presence/absence of a
+substring. This is a completeness argument, not a taste preference: a
+well-formed allowlist has zero degrees of freedom for an attacker to exploit,
+while a denylist has exactly as many holes as patterns nobody thought to add.</p>
 <h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

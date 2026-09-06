@@ -1687,6 +1687,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-cspm-tools-actually-detect-drift-and-how-secrets-managers-avoid-ever-exposing-the-plaintext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how CSPM tools actually detect drift, and how secrets managers avoid ever exposing the plaintext
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#8-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2316,6 +2327,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-cspm-tools-actually-detect-drift-and-how-secrets-managers-avoid-ever-exposing-the-plaintext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how CSPM tools actually detect drift, and how secrets managers avoid ever exposing the plaintext
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#8-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2469,6 +2491,42 @@ automatic rotation instead:</p>
 <p>Catching a public-bucket misconfiguration in a pull request review is
 free; catching it after data has already been exfiltrated is a breach
 notification.</p>
+<h2 id="how-it-actually-works-how-cspm-tools-actually-detect-drift-and-how-secrets-managers-avoid-ever-exposing-the-plaintext">How It Actually Works: how CSPM tools actually detect drift, and how secrets managers avoid ever exposing the plaintext<a class="headerlink" href="#how-it-actually-works-how-cspm-tools-actually-detect-drift-and-how-secrets-managers-avoid-ever-exposing-the-plaintext" title="Permanent link">&para;</a></h2>
+<p>A CSPM tool's core mechanism is a continuous <strong>diff against a policy-as-code
+baseline</strong>: it periodically calls each cloud provider's read-only
+configuration APIs (AWS Config, Azure Resource Graph) to pull the current
+state of every resource as a structured document, evaluates that document
+against a library of rules expressed declaratively (often in Rego, the Open
+Policy Agent language — the same policy-evaluation approach underlying the
+IAM allow/deny logic from Level 2 Module 8, generalized to arbitrary resource
+types), and flags any resource whose actual configuration doesn't satisfy
+the expected invariant. Because this pulls live API state rather than
+relying on infrastructure code being kept in sync with reality, it catches
+<strong>configuration drift</strong> — a change made directly through the console or CLI
+outside of any IaC pipeline — which static analysis of Terraform files
+alone structurally cannot see, since that analysis only ever inspects the
+<em>intended</em> state, not the <em>actual</em> one.</p>
+<p><strong>Secrets managers</strong> (AWS Secrets Manager, HashiCorp Vault) solve a problem
+envelope encryption alone doesn't: an application still needs the plaintext
+secret in memory to use it, so the manager's real job is minimizing the
+secret's <em>lifetime and surface area</em> rather than just encrypting it at rest.
+Mechanically, the workflow is: the application authenticates to the secrets
+manager using its own short-lived identity (a cloud IAM role, a Kubernetes
+service account token) rather than a static credential; the manager verifies
+that identity against policy (again, an allow/deny evaluation) and returns
+the secret over an encrypted channel, at request time, into process memory
+only — never written to disk, environment variables, or a config file
+checked into version control. <strong>Automatic rotation</strong> works because the
+manager, not the application, holds the authority to change the credential
+at the backing service (e.g., calling a database's <code>ALTER USER</code> to set a
+new password) and atomically updates its own stored copy — the two are
+changed as a single operation the manager coordinates, which is what
+prevents the classic rotation failure mode of the credential changing before
+every consumer has fetched the new value. Infrastructure-as-code scanning
+tools apply the identical taint-analysis idea from Level 2 Module 7's static
+analysis to <code>.tf</code>/<code>.yaml</code> files themselves: tracing whether a hardcoded
+string reaching a <code>password</code> or <code>secret</code> field ever originated from a
+secrets-manager reference versus a literal value baked into version control.</p>
 <h2 id="8-checklist">8. Checklist<a class="headerlink" href="#8-checklist" title="Permanent link">&para;</a></h2>
 <ul>
 <li>[ ] Multi-account structure separates prod, dev, and security/logging</li>

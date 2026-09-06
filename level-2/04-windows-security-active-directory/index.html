@@ -1255,6 +1255,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-kerberos-authentication-in-ad-actually-proves-identity-without-sending-a-password" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how Kerberos authentication in AD actually proves identity without sending a password
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2316,6 +2327,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-kerberos-authentication-in-ad-actually-proves-identity-without-sending-a-password" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how Kerberos authentication in AD actually proves identity without sending a password
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2489,6 +2511,52 @@ password hashes offline.</p>
 <li>Restrict who can query AD for service account details (mitigates Kerberoasting reconnaissance).</li>
 <li>Patch domain controllers promptly — many AD-specific critical CVEs (e.g. Zerologon) exist specifically in DC-facing protocols.</li>
 </ul>
+<h2 id="how-it-actually-works-how-kerberos-authentication-in-ad-actually-proves-identity-without-sending-a-password">How It Actually Works: how Kerberos authentication in AD actually proves identity without sending a password<a class="headerlink" href="#how-it-actually-works-how-kerberos-authentication-in-ad-actually-proves-identity-without-sending-a-password" title="Permanent link">&para;</a></h2>
+<p>Active Directory's authentication protocol, <strong>Kerberos</strong>, is built entirely
+around one idea: prove you know a secret without ever transmitting it. The
+flow, simplified:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>1. AS-REQ:  client → KDC: "I'm alice, requesting a Ticket Granting Ticket"
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>            (a timestamp encrypted with a key derived from alice's password
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>             hash is included, proving she knows the password without
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>             sending it)
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>2. AS-REP:  KDC → client: TGT (encrypted with the KDC's own secret key,
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>            opaque to the client) + a session key (encrypted with alice's
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>            key, so only alice can extract it)
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>3. TGS-REQ: client → KDC: "Here's my TGT, I want a ticket for service X"
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>4. TGS-REP: KDC → client: a service ticket encrypted with service X's
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>            long-term key, containing alice's identity + the session key
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>5. AP-REQ:  client → service X: presents the service ticket; service X
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>            decrypts it with its OWN key (which only it and the KDC know)
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>            and now trusts the identity claim inside, with no network
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>            round-trip to the KDC needed at this step
+</code></pre></div>
+<p>The reason this is more resistant to replay than a simple password check is
+that every ticket is time-bound and every request includes a fresh encrypted
+timestamp ("authenticator") — a captured AP-REQ replayed later fails because
+the service checks the timestamp against its own clock and rejects anything
+outside a small window (typically 5 minutes), which is exactly why domain
+controllers and clients must stay closely time-synchronized for Kerberos to
+function at all.</p>
+<p>This same design explains AD's most dangerous attack surface. A
+<strong>Kerberoasting</strong> attack works because any authenticated domain user can
+legitimately <em>request</em> a service ticket for any service account (step 3–4
+above, by design — service tickets are meant to be requestable), and that
+ticket is encrypted with the service account's password-derived key; an
+attacker can then crack that encryption offline, at their own leisure, with
+no further contact with the domain controller. It isn't a bug in Kerberos —
+it's a direct consequence of a legitimate protocol feature (any user may
+request tickets for any service) combined with a weak service-account
+password providing insufficient key-derivation strength — which is precisely
+why <strong>credential protection</strong> (long, randomly generated service account
+passwords, or gMSAs that rotate the password automatically every 30 days) is
+the actual mitigation, not a network-layer control. <strong>Golden/Silver ticket</strong>
+attacks push this further: since a TGT's validity rests entirely on being
+encrypted with the KDC's own secret key (derived from the <code>krbtgt</code> account's
+password hash), an attacker who steals that one hash can forge a TGT for
+<em>any</em> user, with any group membership, entirely offline — which is why
+<code>krbtgt</code> password rotation (twice, since the previous hash stays valid for a
+transition window) is the standard remediation after any suspected domain
+compromise.</p>
 <h2 id="key-terms">Key terms<a class="headerlink" href="#key-terms" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

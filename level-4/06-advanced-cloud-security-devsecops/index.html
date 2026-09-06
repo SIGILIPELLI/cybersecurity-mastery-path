@@ -2074,6 +2074,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-sastdependency-scanning-integrate-into-ci-as-build-graph-analysis-and-how-policy-gates-enforce-without-slowing-the-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how SAST/dependency scanning integrate into CI as build-graph analysis, and how policy gates enforce without slowing the pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#9-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2338,6 +2349,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works-how-sastdependency-scanning-integrate-into-ci-as-build-graph-analysis-and-how-policy-gates-enforce-without-slowing-the-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works: how SAST/dependency scanning integrate into CI as build-graph analysis, and how policy gates enforce without slowing the pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#9-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2482,6 +2504,41 @@ actionable feedback for developers (inline PR comments, clear
 remediation guidance) rather than a slow, opaque gate that blocks
 releases without explanation — the latter breeds workarounds and
 resentment; the former gets fixes merged the same day they're found.</p>
+<h2 id="how-it-actually-works-how-sastdependency-scanning-integrate-into-ci-as-build-graph-analysis-and-how-policy-gates-enforce-without-slowing-the-pipeline">How It Actually Works: how SAST/dependency scanning integrate into CI as build-graph analysis, and how policy gates enforce without slowing the pipeline<a class="headerlink" href="#how-it-actually-works-how-sastdependency-scanning-integrate-into-ci-as-build-graph-analysis-and-how-policy-gates-enforce-without-slowing-the-pipeline" title="Permanent link">&para;</a></h2>
+<p><strong>SAST in CI</strong> runs the same taint-analysis engine described in Level 2
+Module 7, but the integration detail that makes it usable at pipeline speed
+is <strong>incremental analysis</strong>: rather than re-analyzing the entire codebase's
+control-flow/data-flow graph on every commit (expensive — full-repo taint
+analysis can take longer than the rest of the build), modern SAST tools
+cache the graph from the last analyzed commit and recompute only the
+subgraph reachable from changed functions, using the same dependency-graph
+diffing idea a build system like Bazel uses for incremental compilation.
+This is why SAST scan time in CI scales roughly with the size of a <em>diff</em>
+rather than the size of the repository, which is what makes running it on
+every pull request economically viable instead of only nightly.</p>
+<p><strong>Dependency/supply-chain scanning</strong> works by resolving your project's full
+transitive dependency tree, computing a cryptographic hash of each resolved
+package version, and checking those hashes/version-CPEs against the same
+NVD-backed CVE database mechanism from Level 2 Module 5's vulnerability
+scanning — applied to your build manifest instead of a live network host.
+The <strong>SBOM</strong> (Software Bill of Materials) this produces is the artifact that
+makes this checkable <em>after</em> the fact too: because it's a hash-identified,
+versioned list, a newly disclosed CVE can be matched against every SBOM an
+organization has ever generated to instantly answer "which of our shipped
+builds contain the vulnerable version," without re-scanning any running
+system.</p>
+<p><strong>Policy-as-code gating</strong> in CD is a synchronous call, at the deployment
+step, to the identical Rego/OPA evaluation engine from Level 3 Module 6's
+CSPM — the gate blocks the pipeline's next step until the policy evaluation
+returns <code>allow</code>. This scales to hundreds of deployments per day precisely
+because the policy check is a small, fast, local (no external network round
+trip in most implementations) function evaluation against the manifest
+about to be deployed, not a human review step — the same allow/deny
+determinism from IAM evaluation, just invoked automatically at a pipeline
+checkpoint instead of at request time. <strong>Runtime drift detection</strong> closes the
+loop by continuously re-running the same CSPM diff (Level 3 Module 6) after
+deployment, catching the specific case policy-as-code gating cannot: a
+resource changed directly in production after the gate already passed it.</p>
 <h2 id="9-checklist">9. Checklist<a class="headerlink" href="#9-checklist" title="Permanent link">&para;</a></h2>
 <ul>
 <li>[ ] SAST, dependency, and secrets scanning run automatically in CI</li>

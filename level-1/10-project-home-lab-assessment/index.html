@@ -1053,6 +1053,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2317,6 +2328,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-actually-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Actually Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercise" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2523,6 +2545,8 @@ could reproduce your reasoning (tie this back to Module 1's risk model):</p>
    detailed findings below it are for whoever implements the fixes.</p>
 </li>
 </ol>
+<h2 id="how-it-actually-works">How It Actually Works<a class="headerlink" href="#how-it-actually-works" title="Permanent link">&para;</a></h2>
+<p>A real assessment finds things because each scan you run is talking a specific protocol underneath the tool's friendly output: a port scanner sends TCP SYN packets and reads whether it gets SYN-ACK (open), RST (closed), or silence (filtered by a firewall) — it's literally probing the three-way handshake without completing it. A vulnerability scanner works by fingerprinting service banners and version strings, then matching them against a database of known CVEs for that exact version — it isn't "detecting" a flaw live, it's pattern-matching what's already publicly documented. This is exactly why your report should separate "confirmed exploitable" from "version matches a known CVE" — the scanner's confidence is only as good as its version-fingerprinting accuracy, and a mismatched or spoofed banner produces false positives you'd catch only by manually verifying the finding.</p>
 <h2 id="exercise">Exercise<a class="headerlink" href="#exercise" title="Permanent link">&para;</a></h2>
 <p>Complete the full assessment document described above and keep it — you will
 extend this exact skill set into a full web application security assessment

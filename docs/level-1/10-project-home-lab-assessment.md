@@ -124,6 +124,10 @@ A table mapping each finding to its status after your hardening pass:
    plain language. This is the part a decision-maker actually reads; the
    detailed findings below it are for whoever implements the fixes.
 
+## How It Actually Works
+
+A real assessment finds things because each scan you run is talking a specific protocol underneath the tool's friendly output: a port scanner sends TCP SYN packets and reads whether it gets SYN-ACK (open), RST (closed), or silence (filtered by a firewall) — it's literally probing the three-way handshake without completing it. A vulnerability scanner works by fingerprinting service banners and version strings, then matching them against a database of known CVEs for that exact version — it isn't "detecting" a flaw live, it's pattern-matching what's already publicly documented. This is exactly why your report should separate "confirmed exploitable" from "version matches a known CVE" — the scanner's confidence is only as good as its version-fingerprinting accuracy, and a mismatched or spoofed banner produces false positives you'd catch only by manually verifying the finding.
+
 ## Exercise
 
 Complete the full assessment document described above and keep it — you will

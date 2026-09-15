@@ -196,6 +196,10 @@ file, if one exists, versus a normal shutdown flushing and clearing it.
 | **C2 (command-and-control)** | Infrastructure an attacker uses to control compromised systems remotely |
 | **IOC (Indicator of Compromise)** | A specific artifact (file hash, IP, domain) suggesting a system is compromised |
 
+## 🔀 Related lessons on other tracks
+
+- [Server Ops — 03 · Incident Response & Runbooks](https://sigilipelli.github.io/server-ops-mastery-path/level-4/03-incident-response-runbooks/)
+
 ## Exercise
 
 No special tools required for most of this — a text editor and, optionally,

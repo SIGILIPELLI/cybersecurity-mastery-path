@@ -180,3 +180,7 @@ coverage, applied to process rather than technical controls.
 
 Module 8 looks at building the SOC organization that runs this incident
 response capability day to day.
+
+## 🔀 Related lessons on other tracks
+
+- [Server Ops — 03 · Incident Response & Runbooks](https://sigilipelli.github.io/server-ops-mastery-path/level-4/03-incident-response-runbooks/)

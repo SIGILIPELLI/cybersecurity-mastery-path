@@ -277,6 +277,10 @@ condition you can write rules against directly.
 | **Packet capture** | Recording network traffic for inspection, packet by packet |
 | **Default-deny** | A firewall policy that blocks everything not explicitly allowed |
 
+## 🔀 Related lessons on other tracks
+
+- [AI Tools — 06 · Data Privacy & Security When Using AI Tools](https://sigilipelli.github.io/ai-tools-mastery-path/level-2/06-data-privacy-security/)
+
 ## Exercise
 
 Using the VM (or your own machine, for the nmap/Wireshark parts) set up in

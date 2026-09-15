@@ -283,6 +283,10 @@ sanitizers keep failing in production.
 | **Output encoding / escaping** | Converting special characters so they render as text, not markup |
 | **Reflected XSS** | Malicious script delivered via a crafted URL/request, executed once |
 
+## 🔀 Related lessons on other tracks
+
+- [REST API — 02 · API Security Hardening (CORS, Injection, OWASP API Top 10)](https://sigilipelli.github.io/rest-api-mastery-path/level-4/02-api-security-hardening/)
+
 ## Exercise
 
 Using the app you just built and ran:

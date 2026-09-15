@@ -213,6 +213,11 @@ behind "why doesn't everyone just use ABAC everywhere."
 | **Privilege creep** | Accumulated, unrevoked access left over from past roles |
 | **Broken access control** | An authenticated user able to act beyond their intended permissions |
 
+## 🔀 Related lessons on other tracks
+
+- [ETL & Data Lake — 03 · Security & Access Control Patterns for Data Lakes](https://sigilipelli.github.io/etl-datalake-mastery-path/level-4/03-security-access-control/)
+- [RAG — 02 · Multi-Tenant RAG & Access Control](https://sigilipelli.github.io/rag-mastery-path/level-4/02-multi-tenant-access-control/)
+
 ## Exercise
 
 No special tools required — an authenticator app (Google Authenticator, Authy,

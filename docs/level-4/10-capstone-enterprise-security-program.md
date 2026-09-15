@@ -126,3 +126,8 @@ Level 4. The skills compound: architecture decisions inform detection
 strategy, detection findings inform threat intelligence, threat
 intelligence informs risk prioritization, and risk prioritization
 justifies the budget that funds the whole cycle again.
+
+## 🔀 Related lessons on other tracks
+
+- [Tableau — 09 · Project — Enterprise Dashboard with Row-Level Security](https://sigilipelli.github.io/tableau-mastery-path/level-3/10-project-enterprise-dashboard-rls/)
+- [Servant Leadership — 10 · Capstone — Design an Org-Wide Leadership Development Program](https://sigilipelli.github.io/servant-leadership-mastery-path/level-4/10-capstone-leadership-development-program/)

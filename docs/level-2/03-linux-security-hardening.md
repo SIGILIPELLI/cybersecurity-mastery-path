@@ -223,6 +223,12 @@ non-attack case — the extra check was already cheap enough to always run.
 | **CIS Benchmark** | Industry-standard, vendor-neutral hardening checklist |
 | **Unattended upgrades** | Automatic application of security patches without manual intervention |
 
+## 🔀 Related lessons on other tracks
+
+- [Embedded Linux — 08 · Security Hardening & CVE Management](https://sigilipelli.github.io/embedded-linux-mastery-path/level-4/08-security-hardening/)
+- [Embedded Python — Security Hardening — TLS & Secure Storage](https://sigilipelli.github.io/embedded-python-mastery-path/level-4/06-security-hardening/)
+- [GitHub & Git — 08 · Security Hardening (CODEOWNERS, signed commits, SAST)](https://sigilipelli.github.io/github-mastery-path/level-4/08-security-hardening/)
+
 ## Exercise
 
 1. Spin up a fresh Ubuntu Server VM or container.

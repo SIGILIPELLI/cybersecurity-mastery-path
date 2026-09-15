@@ -176,3 +176,9 @@ covers.
 The capstone project in Module 10 pulls together architecture, risk
 management, and every technical capability from this program into a
 complete enterprise security program design.
+
+## 🔀 Related lessons on other tracks
+
+- [Embedded Linux — 08 · Security Hardening & CVE Management](https://sigilipelli.github.io/embedded-linux-mastery-path/level-4/08-security-hardening/)
+- [IBM Cloud — 06 · Security Deep Dive (Hyper Protect, Key Management)](https://sigilipelli.github.io/ibm-cloud-mastery-path/level-4/06-security-deep-dive/)
+- [Agile — 04 · Risk Management Across SDLC Phases](https://sigilipelli.github.io/agile-mastery-path/level-3/04-risk-management-sdlc/)

@@ -205,6 +205,10 @@ properties covered in Level 1 Module 4.
 | **Brute force** | Repeated login attempts trying many passwords/usernames |
 | **Retention period** | How long logs are kept before deletion/archival |
 
+## 🔀 Related lessons on other tracks
+
+- [IBM Cloud — 08 · Monitoring & Log Analysis](https://sigilipelli.github.io/ibm-cloud-mastery-path/level-1/08-monitoring-log-analysis/)
+
 ## Exercise
 
 1. Stand up the ELK stack via the docker-compose file above.

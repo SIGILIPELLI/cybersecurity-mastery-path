@@ -1,3 +1,7 @@
+---
+description: "Web Application Security Hands-On — Level 1 Module 6 introduced the OWASP Top 10 conceptually and demonstrated SQL injection and reflected XSS against a…"
+---
+
 # 02 · Web Application Security Hands-On
 
 Level 1 Module 6 introduced the OWASP Top 10 conceptually and demonstrated

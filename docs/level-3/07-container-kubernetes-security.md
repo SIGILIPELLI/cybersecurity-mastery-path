@@ -1,3 +1,7 @@
+---
+description: "Container & Kubernetes Security — Containers and Kubernetes introduce a new set of layers to secure — the image, the container runtime, and the…"
+---
+
 # 07 · Container & Kubernetes Security
 
 Containers and Kubernetes introduce a new set of layers to secure — the

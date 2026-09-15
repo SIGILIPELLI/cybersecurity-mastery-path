@@ -1,3 +1,7 @@
+---
+description: "Cloud Security Deep Dive — Level 2 Module 8 covered cloud security fundamentals: shared responsibility, IAM basics, storage misconfigurations. This module…"
+---
+
 # 06 · Cloud Security Deep Dive
 
 Level 2 Module 8 covered cloud security fundamentals: shared

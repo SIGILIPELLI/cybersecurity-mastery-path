@@ -1,3 +1,7 @@
+---
+description: "Linux Security Hardening — Level 1 Module 3 covered OS security basics conceptually across platforms. This module goes hands-on with Linux server…"
+---
+
 # 03 · Linux Security Hardening
 
 Level 1 Module 3 covered OS security basics conceptually across platforms.

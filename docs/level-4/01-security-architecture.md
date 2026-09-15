@@ -1,3 +1,7 @@
+---
+description: "Security Architecture — Level 4 shifts perspective: from executing individual tests and building individual detections, to designing the system those…"
+---
+
 # 01 · Security Architecture
 
 Level 4 shifts perspective: from executing individual tests and building

@@ -1,3 +1,7 @@
+---
+description: "Threat Intelligence — Threat intelligence turns raw indicators (from malware analysis, incident response, and external feeds) into decisions: what to…"
+---
+
 # 04 · Threat Intelligence
 
 Threat intelligence turns raw indicators (from malware analysis,

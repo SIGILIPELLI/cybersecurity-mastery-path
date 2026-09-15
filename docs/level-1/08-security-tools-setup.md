@@ -1,3 +1,7 @@
+---
+description: "Security Tools Setup — This module gets a real home lab running: a place to practice everything in this course safely, plus the three tools you'll use…"
+---
+
 # 08 · Security Tools Setup
 
 This module gets a real home lab running: a place to practice everything in

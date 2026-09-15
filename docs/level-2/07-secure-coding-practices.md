@@ -1,3 +1,7 @@
+---
+description: "Secure Coding Practices — Level 1 Module 6 and Level 2 Module 2 showed injection and XSS as symptoms. This module covers the discipline that prevents…"
+---
+
 # 07 · Secure Coding Practices
 
 Level 1 Module 6 and Level 2 Module 2 showed injection and XSS as *symptoms*.

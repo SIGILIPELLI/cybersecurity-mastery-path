@@ -1,3 +1,7 @@
+---
+description: "Common Web Vulnerabilities — OWASP Top 10 Overview — The OWASP Top 10 is the industry-standard list of the most critical web application security risks…"
+---
+
 # 06 · Common Web Vulnerabilities — OWASP Top 10 Overview
 
 The **OWASP Top 10** is the industry-standard list of the most critical web

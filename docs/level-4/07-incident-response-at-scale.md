@@ -1,3 +1,7 @@
+---
+description: "Incident Response at Scale — Level 1 Module 9 covered IR fundamentals for a single incident. Enterprise-scale IR must handle multiple simultaneous…"
+---
+
 # 07 · Incident Response at Scale
 
 Level 1 Module 9 covered IR fundamentals for a single incident.

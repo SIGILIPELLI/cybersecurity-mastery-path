@@ -1,3 +1,7 @@
+---
+description: "Advanced Threat Hunting — SIEM alerts (Level 3 Module 5) catch what you already thought to detect. Threat hunting is the proactive discipline of looking…"
+---
+
 # 02 · Advanced Threat Hunting
 
 SIEM alerts (Level 3 Module 5) catch what you already thought to detect.

@@ -1,3 +1,7 @@
+---
+description: "Security Automation & SOAR — A SOC that manually triages every alert doesn't scale — analyst time is the scarcest resource in security operations. SOAR…"
+---
+
 # 05 · Security Automation & SOAR
 
 A SOC that manually triages every alert doesn't scale — analyst time is

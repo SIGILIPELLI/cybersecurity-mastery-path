@@ -1,3 +1,7 @@
+---
+description: "Building a SOC — Every capability built so far — SIEM (Level 3 Module 5), threat hunting (Module 2), IR at scale (Module 7), automation (Module 5) — needs…"
+---
+
 # 08 · Building a SOC
 
 Every capability built so far — SIEM (Level 3 Module 5), threat hunting

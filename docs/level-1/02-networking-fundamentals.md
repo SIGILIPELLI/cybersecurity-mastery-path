@@ -1,3 +1,7 @@
+---
+description: "Networking Fundamentals for Security — You cannot secure — or attack, or investigate — what you don't understand. Nearly every security control in this…"
+---
+
 # 02 · Networking Fundamentals for Security
 
 You cannot secure — or attack, or investigate — what you don't understand.

@@ -1,3 +1,7 @@
+---
+description: "Incident Response Basics — Every control in this course can fail. Incident response (IR) is the discipline of what happens after it does — detecting a…"
+---
+
 # 09 · Incident Response Basics
 
 Every control in this course can fail. Incident response (IR) is the

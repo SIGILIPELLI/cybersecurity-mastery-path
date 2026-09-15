@@ -1,3 +1,7 @@
+---
+description: "Project — Web App Security Assessment — This capstone project for Level 2 combines everything from this level — web app testing (Module 2), vulnerability…"
+---
+
 # 10 · Project — Web App Security Assessment
 
 This capstone project for Level 2 combines everything from this level —

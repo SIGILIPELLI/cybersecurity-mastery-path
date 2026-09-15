@@ -1,3 +1,7 @@
+---
+description: "Advanced Cloud Security & DevSecOps — Level 3 Module 6 covered cloud security architecture. This module focuses on embedding security directly into the…"
+---
+
 # 06 · Advanced Cloud Security & DevSecOps
 
 Level 3 Module 6 covered cloud security architecture. This module

@@ -1,3 +1,7 @@
+---
+description: "Cloud Security Basics — Cloud platforms (AWS, Azure, GCP) shift some security responsibility to the provider but not all of it — and misunderstanding…"
+---
+
 # 08 · Cloud Security Basics
 
 Cloud platforms (AWS, Azure, GCP) shift *some* security responsibility to

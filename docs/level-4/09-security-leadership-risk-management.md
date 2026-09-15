@@ -1,3 +1,7 @@
+---
+description: "Security Leadership & Risk Management — Every technical control in this program exists to manage business risk. This module covers the leadership…"
+---
+
 # 09 · Security Leadership & Risk Management
 
 Every technical control in this program exists to manage business risk.

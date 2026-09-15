@@ -1,3 +1,7 @@
+---
+description: "Digital Forensics Basics — Incident response (Level 1 Module 9) tells you what to do when something goes wrong. Digital forensics is the discipline of…"
+---
+
 # 02 · Digital Forensics Basics
 
 Incident response (Level 1 Module 9) tells you *what to do* when something

@@ -1,3 +1,7 @@
+---
+description: "Red Team vs Blue Team Concepts — Every skill built so far — offense (pentesting) and defense (SIEM, forensics, IR) — comes together in structured…"
+---
+
 # 08 · Red Team vs Blue Team Concepts
 
 Every skill built so far — offense (pentesting) and defense (SIEM,

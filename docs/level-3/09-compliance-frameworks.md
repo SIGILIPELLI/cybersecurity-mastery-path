@@ -1,3 +1,7 @@
+---
+description: "Compliance & Frameworks — Compliance frameworks translate 'we should be secure' into specific, auditable requirements. Understanding them matters even for…"
+---
+
 # 09 · Compliance & Frameworks
 
 Compliance frameworks translate "we should be secure" into specific,

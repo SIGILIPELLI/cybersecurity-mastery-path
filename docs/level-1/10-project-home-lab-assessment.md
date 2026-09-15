@@ -1,3 +1,7 @@
+---
+description: "Project — Home Lab Security Assessment — This project pulls together every module in Level 1 into one real deliverable: a security assessment of a machine…"
+---
+
 # 10 · Project — Home Lab Security Assessment
 
 This project pulls together every module in Level 1 into one real

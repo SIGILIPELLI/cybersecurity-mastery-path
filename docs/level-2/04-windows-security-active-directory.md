@@ -1,3 +1,7 @@
+---
+description: "Windows Security & Active Directory Basics — Most enterprise networks run on Active Directory (AD) — Microsoft's directory service for managing users…"
+---
+
 # 04 · Windows Security & Active Directory Basics
 
 Most enterprise networks run on **Active Directory (AD)** — Microsoft's

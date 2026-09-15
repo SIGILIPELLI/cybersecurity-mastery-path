@@ -1,3 +1,7 @@
+---
+description: "Operating System Security Basics — The operating system is where every security control eventually gets enforced — a firewall rule, a file permission, a…"
+---
+
 # 03 · Operating System Security Basics
 
 The operating system is where every security control eventually gets

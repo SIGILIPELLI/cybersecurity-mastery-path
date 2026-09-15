@@ -1,3 +1,7 @@
+---
+description: "Advanced SIEM (Splunk/ELK) — Level 2 Module 6 covered SIEM fundamentals — collecting and searching logs. This module goes further: building real…"
+---
+
 # 05 · Advanced SIEM (Splunk/ELK)
 
 Level 2 Module 6 covered SIEM fundamentals — collecting and searching

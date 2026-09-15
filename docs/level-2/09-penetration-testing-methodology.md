@@ -1,3 +1,7 @@
+---
+description: "Penetration Testing Methodology — A penetration test is an authorized, structured simulation of a real attack, designed to find exploitable weaknesses…"
+---
+
 # 09 · Penetration Testing Methodology
 
 A penetration test is an *authorized*, structured simulation of a real

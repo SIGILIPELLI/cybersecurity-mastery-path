@@ -1,3 +1,7 @@
+---
+description: "Advanced Cryptography & PKI — Level 1 Module 4 covered cryptography fundamentals — symmetric/asymmetric encryption, hashing. This module builds the PKI…"
+---
+
 # 04 · Advanced Cryptography & PKI
 
 Level 1 Module 4 covered cryptography fundamentals — symmetric/asymmetric

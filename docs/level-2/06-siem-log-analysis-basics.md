@@ -1,3 +1,7 @@
+---
+description: "SIEM & Log Analysis Basics — Every meaningful security event leaves a trail in logs — a failed login, a new process, an outbound connection to an unusual…"
+---
+
 # 06 · SIEM & Log Analysis Basics
 
 Every meaningful security event leaves a trail in logs — a failed login, a

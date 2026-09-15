@@ -1,3 +1,7 @@
+---
+description: "What Is Cybersecurity? — Cybersecurity is the practice of protecting systems, networks, and data from unauthorized access, disruption, or damage, while…"
+---
+
 # 01 · What Is Cybersecurity?
 
 Cybersecurity is the practice of **protecting systems, networks, and data from

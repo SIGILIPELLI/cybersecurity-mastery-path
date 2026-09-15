@@ -1,3 +1,7 @@
+---
+description: "Authentication & Access Control — A system can authenticate you perfectly (you really are who you say you are) and still authorize you incorrectly (you…"
+---
+
 # 05 · Authentication & Access Control
 
 Modules 1–4 covered *what* you're protecting and the cryptography that

@@ -1,3 +1,7 @@
+---
+description: "Advanced Penetration Testing — Level 2 Module 9 covered the standard pentest methodology end to end. This module goes deeper into techniques used once…"
+---
+
 # 01 · Advanced Penetration Testing
 
 Level 2 Module 9 covered the standard pentest methodology end to end.

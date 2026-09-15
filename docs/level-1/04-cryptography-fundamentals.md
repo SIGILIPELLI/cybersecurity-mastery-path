@@ -1,3 +1,7 @@
+---
+description: "Cryptography Fundamentals — Cryptography is how confidentiality and integrity (Module 1's CIA triad) actually get enforced mathematically, rather than…"
+---
+
 # 04 · Cryptography Fundamentals
 
 Cryptography is how confidentiality and integrity (Module 1's CIA triad)

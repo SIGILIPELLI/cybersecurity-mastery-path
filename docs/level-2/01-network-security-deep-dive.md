@@ -1,3 +1,7 @@
+---
+description: "Network Security Deep Dive — Level 1 Module 2 covered how packets move. This module goes one layer deeper: how firewalls actually decide what to drop, how…"
+---
+
 # 01 · Network Security Deep Dive
 
 Level 1 Module 2 covered how packets move. This module goes one layer

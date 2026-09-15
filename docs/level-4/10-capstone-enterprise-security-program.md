@@ -1,3 +1,7 @@
+---
+description: "Capstone — Enterprise Security Program Design — This capstone brings together every module from Level 1 through Level 4 into a single deliverable: a…"
+---
+
 # 10 · Capstone — Enterprise Security Program Design
 
 This capstone brings together every module from Level 1 through Level 4

@@ -1,3 +1,7 @@
+---
+description: "Zero Trust Architecture — 'Never trust, always verify' — zero trust replaces the old model of a hardened perimeter with a soft, trusted interior with…"
+---
+
 # 03 · Zero Trust Architecture
 
 "Never trust, always verify" — zero trust replaces the old model of a

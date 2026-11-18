@@ -21,7 +21,7 @@ You are free to:
 
 **No permission needed, no fee, no login required.** The only condition is
 attribution — credit "Cybersecurity Mastery Path" (or the wider [Mastery Path
-series](https://sigilipelli.github.io/cybersecurity-mastery-path/)) and link back to the
+series](https://learnmasterypath.com/cybersecurity-mastery-path/)) and link back to the
 original page.
 
 ## Code snippets

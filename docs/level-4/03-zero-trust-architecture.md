@@ -173,4 +173,4 @@ identity and encrypted-everywhere communication actually possible.
 
 ## 🔀 Related lessons on other tracks
 
-- [Azure — 07 · Security Deep Dive (Sentinel, Zero Trust)](https://sigilipelli.github.io/azure-mastery-path/level-4/07-security-sentinel-zero-trust/)
+- [Azure — 07 · Security Deep Dive (Sentinel, Zero Trust)](https://learnmasterypath.com/azure-mastery-path/level-4/07-security-sentinel-zero-trust/)

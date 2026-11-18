@@ -4,7 +4,7 @@ A free, structured, module-wise cybersecurity training program — networking,
 cryptography, web security, incident response, and pentesting methodology
 (authorized-lab/CTF framing only), entry level to master level.
 
-Live site: https://sigilipelli.github.io/cybersecurity-mastery-path/
+Live site: https://learnmasterypath.com/cybersecurity-mastery-path/
 
 Built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/).
 

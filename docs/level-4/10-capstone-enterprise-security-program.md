@@ -129,5 +129,5 @@ justifies the budget that funds the whole cycle again.
 
 ## 🔀 Related lessons on other tracks
 
-- [Tableau — 09 · Project — Enterprise Dashboard with Row-Level Security](https://sigilipelli.github.io/tableau-mastery-path/level-3/10-project-enterprise-dashboard-rls/)
-- [Servant Leadership — 10 · Capstone — Design an Org-Wide Leadership Development Program](https://sigilipelli.github.io/servant-leadership-mastery-path/level-4/10-capstone-leadership-development-program/)
+- [Tableau — 09 · Project — Enterprise Dashboard with Row-Level Security](https://learnmasterypath.com/tableau-mastery-path/level-3/10-project-enterprise-dashboard-rls/)
+- [Servant Leadership — 10 · Capstone — Design an Org-Wide Leadership Development Program](https://learnmasterypath.com/servant-leadership-mastery-path/level-4/10-capstone-leadership-development-program/)

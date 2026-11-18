@@ -215,8 +215,8 @@ behind "why doesn't everyone just use ABAC everywhere."
 
 ## 🔀 Related lessons on other tracks
 
-- [ETL & Data Lake — 03 · Security & Access Control Patterns for Data Lakes](https://sigilipelli.github.io/etl-datalake-mastery-path/level-4/03-security-access-control/)
-- [RAG — 02 · Multi-Tenant RAG & Access Control](https://sigilipelli.github.io/rag-mastery-path/level-4/02-multi-tenant-access-control/)
+- [ETL & Data Lake — 03 · Security & Access Control Patterns for Data Lakes](https://learnmasterypath.com/etl-datalake-mastery-path/level-4/03-security-access-control/)
+- [RAG — 02 · Multi-Tenant RAG & Access Control](https://learnmasterypath.com/rag-mastery-path/level-4/02-multi-tenant-access-control/)
 
 ## Exercise
 

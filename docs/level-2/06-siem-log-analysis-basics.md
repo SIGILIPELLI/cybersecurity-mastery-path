@@ -207,7 +207,7 @@ properties covered in Level 1 Module 4.
 
 ## 🔀 Related lessons on other tracks
 
-- [IBM Cloud — 08 · Monitoring & Log Analysis](https://sigilipelli.github.io/ibm-cloud-mastery-path/level-1/08-monitoring-log-analysis/)
+- [IBM Cloud — 08 · Monitoring & Log Analysis](https://learnmasterypath.com/ibm-cloud-mastery-path/level-1/08-monitoring-log-analysis/)
 
 ## Exercise
 

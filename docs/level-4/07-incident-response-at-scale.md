@@ -183,4 +183,4 @@ response capability day to day.
 
 ## 🔀 Related lessons on other tracks
 
-- [Server Ops — 03 · Incident Response & Runbooks](https://sigilipelli.github.io/server-ops-mastery-path/level-4/03-incident-response-runbooks/)
+- [Server Ops — 03 · Incident Response & Runbooks](https://learnmasterypath.com/server-ops-mastery-path/level-4/03-incident-response-runbooks/)

@@ -1,3 +1,7 @@
+---
+description: "Level 3 (Advanced) of the free Cybersecurity Mastery Path: Advanced Penetration Testing, Digital Forensics Basics, Malware Analysis Basics, Threat…"
+---
+
 # Level 3 · Advanced
 
 ## Modules

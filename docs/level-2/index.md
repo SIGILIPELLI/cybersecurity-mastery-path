@@ -1,3 +1,7 @@
+---
+description: "Level 2 (Intermediate) of the free Cybersecurity Mastery Path: Network Security Deep Dive, Web Application Security Hands-On, Linux Security Hardening…"
+---
+
 # Level 2 · Intermediate
 
 ## Modules

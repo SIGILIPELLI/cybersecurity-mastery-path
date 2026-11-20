@@ -1,3 +1,7 @@
+---
+description: "Level 4 (Master) of the free Cybersecurity Mastery Path: Security Architecture, Advanced Threat Hunting, Zero Trust Architecture, Advanced Cryptography &…"
+---
+
 # Level 4 · Master
 
 ## Modules

@@ -1,3 +1,7 @@
+---
+description: "Level 1 (Entry) of the free Cybersecurity Mastery Path. Understand the core concepts of cybersecurity — the CIA triad, networking, OS security…"
+---
+
 # Level 1 · Entry <span class="level-badge">Foundations</span>
 
 Goal: understand the core concepts of cybersecurity — the CIA triad,

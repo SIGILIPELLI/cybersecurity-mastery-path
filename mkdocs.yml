@@ -53,9 +53,11 @@ markdown_extensions:
 extra_css:
   - stylesheets/extra.css
   - stylesheets/progress-tracker.css
+  - stylesheets/final-quiz.css
 
 extra_javascript:
   - javascripts/progress-tracker.js
+  - javascripts/final-quiz.js
 
 
 
@@ -119,3 +121,5 @@ nav:
       - "08 · Building a SOC": level-4/08-building-a-soc.md
       - "09 · Security Leadership & Risk Management": level-4/09-security-leadership-risk-management.md
       - "10 · Capstone — Enterprise Security Program Design": level-4/10-capstone-enterprise-security-program.md
+  - "🎯 Final Quiz": quiz.md
+

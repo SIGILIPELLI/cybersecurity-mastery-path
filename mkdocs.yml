@@ -75,8 +75,8 @@ not_in_nav: |
 
 nav:
   - Home: index.md
-  - "💼 Interview Questions": interview-questions.md
-  - "📋 Cheat Sheet": cheat-sheet.md
+  - Interview Questions: interview-questions.md
+  - Cheat Sheet: cheat-sheet.md
   - "Level 1 · Entry":
       - Overview: level-1/index.md
       - "01 · What Is Cybersecurity?": level-1/01-what-is-cybersecurity.md
@@ -125,5 +125,5 @@ nav:
       - "08 · Building a SOC": level-4/08-building-a-soc.md
       - "09 · Security Leadership & Risk Management": level-4/09-security-leadership-risk-management.md
       - "10 · Capstone — Enterprise Security Program Design": level-4/10-capstone-enterprise-security-program.md
-  - "🎯 Final Quiz": quiz.md
+  - Final Quiz: quiz.md
 

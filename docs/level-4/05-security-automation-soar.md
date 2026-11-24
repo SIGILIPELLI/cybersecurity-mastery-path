@@ -166,6 +166,10 @@ not a general limitation on how "smart" the tooling is allowed to be.
 - [ ] Playbooks version-controlled and reviewed like code
 - [ ] Time-saved metrics tracked to justify and prioritize further automation
 
+## Exercise
+
+Write the phishing-triage playbook as pseudocode: extract indicators, enrich them, decide, and take action, with a human-approval step before any destructive action such as deleting mail across mailboxes. Then do the business case: 200 phishing alerts a week at 12 minutes each, automating 60 percent of them, saves how many analyst hours a week? (Work it out and show the formula.) Name two cases you would never automate.
+
 ## What's next
 
 Module 6 extends automation and DevSecOps practices specifically into

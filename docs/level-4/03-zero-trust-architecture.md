@@ -166,6 +166,10 @@ being sufficient for lateral movement once this is in place.
 - [ ] Access re-evaluated continuously, not only at initial login
 - [ ] A phased roadmap exists rather than treating zero trust as one project
 
+## Exercise
+
+Pick one internal application and design its zero trust access: draw the policy decision point and policy enforcement point, list at least five signals the decision uses (identity, device posture, location, time, sensitivity), and write the policy as a rule, for example "engineers may reach the production database only from a compliant device, with multi-factor authentication, and just in time". Say what you would migrate first and why, since zero trust is a journey, not a product.
+
 ## What's next
 
 Module 4 covers the cryptography and PKI foundations that make strong

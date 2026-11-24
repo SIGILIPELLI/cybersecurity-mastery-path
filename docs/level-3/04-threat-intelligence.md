@@ -172,6 +172,10 @@ feeds are machine-actionable in a way that PDF threat reports are not.
 - [ ] Intelligence disseminated in a format each audience can act on
 - [ ] Feedback loop exists to retire stale or irrelevant indicators
 
+## Exercise
+
+Place these six indicators on the Pyramid of Pain and say how painful each is for an attacker to change: a file hash, an IP address, a domain name, a tool's distinctive command-line pattern, a network artifact such as a User-Agent string, and a technique such as credential dumping from LSASS. Then write a one-paragraph priority intelligence requirement for a regional hospital, name which of strategic, operational or tactical intelligence answers it, and give one source you would trust, with a confidence rating and the reason for it.
+
 ## What's next
 
 Module 5 puts this intelligence to work inside a SIEM at scale.

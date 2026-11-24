@@ -155,6 +155,10 @@ programs track them as the primary KPIs rather than raw alert-closure counts.
 - [ ] MTTD/MTTR and ATT&CK coverage tracked and reported to leadership
 - [ ] Analyst wellbeing actively managed, not left to attrition to reveal problems
 
+## Exercise
+
+Work out staffing for a 24x7 SOC. One analyst seat must be filled 8,760 hours a year; one analyst provides about 1,800 productive hours after leave, training and breaks. How many full-time analysts does one always-staffed seat need, and how many for two seats? (8,760 / 1,800 is about 4.87, so plan on five per seat before attrition; show your working for two seats.) Then choose five metrics you would report to leadership and say which one could be gamed.
+
 ## What's next
 
 Module 9 moves up a level further — the leadership and risk management

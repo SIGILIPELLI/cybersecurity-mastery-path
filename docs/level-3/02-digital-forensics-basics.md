@@ -193,6 +193,10 @@ rather than simply trusted.
 - [ ] Timeline built from at least two independent artifact sources
 - [ ] Report separates verified fact from analyst interpretation
 
+## Exercise
+
+Practise evidence integrity on files you own. Create a folder with five small text files, record the SHA-256 of each (`shasum -a 256 *` on macOS, `sha256sum *` on Linux), copy the folder to a second location and confirm every hash matches. Then change a single character in one copy and show that exactly one hash changes. Finally, write a half-page chain-of-custody record (what, who, when, hash, where stored) and rank these four sources by order of volatility: running-process memory, a router's connection table, the disk, an off-site backup.
+
 ## What's next
 
 Module 3 covers analyzing the malware itself once forensics has located

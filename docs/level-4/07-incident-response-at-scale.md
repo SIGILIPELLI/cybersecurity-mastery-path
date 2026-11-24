@@ -176,6 +176,10 @@ coverage, applied to process rather than technical controls.
 - [ ] Post-incident action items tracked to actual completion
 - [ ] Tabletop exercises rehearse the command structure, not just technical steps
 
+## Exercise
+
+Run a 20-minute tabletop with colleagues or on paper: ransomware has encrypted 200 hosts across three sites. Assign the incident commander, operations, communications and legal roles; set the severity and escalation path; decide the containment order; and write five injects (for example "a journalist calls", "backups are also encrypted"). Afterwards, write a half-page retrospective: what slowed you down, which decisions were unclear, and one change for next time.
+
 ## What's next
 
 Module 8 looks at building the SOC organization that runs this incident

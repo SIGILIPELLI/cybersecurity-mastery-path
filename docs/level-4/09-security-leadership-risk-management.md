@@ -171,6 +171,10 @@ covers.
 - [ ] Third-party/vendor access reviewed against the same risk framework
 - [ ] Leadership-facing metrics track trend over time, not single snapshots
 
+## Exercise
+
+Build a risk register with five risks for an imagined company. For each give a likelihood and an impact from 1 to 5, the score (likelihood times impact), the treatment (mitigate, transfer, avoid or accept), an owner and a review date. Then write the two top risks as plain-language sentences for a board slide, with the business consequence and the decision you need from them, and no jargon.
+
 ## What's next
 
 The capstone project in Module 10 pulls together architecture, risk

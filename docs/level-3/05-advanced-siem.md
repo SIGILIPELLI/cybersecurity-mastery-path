@@ -183,6 +183,10 @@ count with an ATT&CK-aligned follow-on event) to the correlation itself.
 - [ ] Dashboards tailored per audience (analyst vs. exec)
 - [ ] Data tiering configured so hot-path searches stay fast at scale
 
+## Exercise
+
+Write a correlation search, in your SIEM's query language or in clear pseudocode, that fires when one account has five or more failed logins followed by a success from the same source within ten minutes. Map it to an ATT&CK technique, list the log fields it needs, and name two normalisation problems that would make it miss events (for example different username formats across systems). Then propose two tuning changes that cut false positives without hiding real attacks, and say how you would measure the effect.
+
 ## What's next
 
 Module 6 applies these same log-and-detection principles specifically

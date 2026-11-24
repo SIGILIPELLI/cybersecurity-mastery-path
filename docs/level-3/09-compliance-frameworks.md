@@ -161,6 +161,10 @@ audit.
 - [ ] Evidence collection automated/continuous rather than pre-audit scramble
 - [ ] Gaps tracked as remediation items with owners and deadlines
 
+## Exercise
+
+Take one control, "administrators must use multi-factor authentication", and map it to the current text of NIST CSF, ISO 27001 Annex A, PCI DSS and SOC 2 by finding the matching clause in each framework's own document and citing it. Present the result as a four-row table with a column for the evidence an auditor would ask for. Then say what you would automate so this evidence is collected continuously instead of once a year.
+
 ## What's next
 
 Module 10's capstone project produces a full penetration test report —

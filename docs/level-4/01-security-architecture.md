@@ -151,6 +151,10 @@ maximally secure choice organizations can afford to make.
 - [ ] Architecture review is a pre-build gate, not a pre-launch afterthought
 - [ ] Trade-off decisions documented, not just the final design
 
+## Exercise
+
+Take a three-tier web application (browser, web tier, database). List the trust boundaries, then identify the top five threats with a STRIDE pass, and for each pick one preventive and one detective control. Write a one-page architecture review of your design: what you decided, what you accepted as residual risk and what usability or cost trade-off you made.
+
 ## What's next
 
 Module 2 builds the proactive detection capability — threat hunting —

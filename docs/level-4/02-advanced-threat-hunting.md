@@ -161,6 +161,10 @@ instead at token/permission-change telemetry.
 - [ ] Confirmed findings converted into permanent detections
 - [ ] Hunt results logged for institutional memory, not re-derived each time
 
+## Exercise
+
+Write a hunt plan for the hypothesis "an attacker is running encoded PowerShell launched from Office applications". Give the ATT&CK technique, the data sources needed, the query logic in plain language, how you will baseline normal behaviour, what result would confirm and what would refute the hypothesis, and how a successful hunt becomes a permanent detection rule. Record it in the format the lesson uses for documenting hunts.
+
 ## What's next
 
 Module 3 looks at zero trust architecture, a design philosophy that

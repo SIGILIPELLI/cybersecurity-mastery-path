@@ -198,6 +198,10 @@ future break in either one alone.
 - [ ] Long-lived sensitive data assessed for post-quantum migration risk
 - [ ] Cryptographic code uses vetted libraries, constant-time comparisons
 
+## Exercise
+
+In a lab, use OpenSSL to build a tiny PKI: create a root CA key and certificate, issue a server certificate signed by it, and confirm the chain with `openssl verify -CAfile root.pem server.pem`. Inspect the result with `openssl x509 -text -noout` and note the validity period, the key usage and the issuer. Then explain how revocation would work for this server (CRL or OCSP) and what you would change to require mutual TLS.
+
 ## What's next
 
 Module 5 automates much of the detection and response work built through

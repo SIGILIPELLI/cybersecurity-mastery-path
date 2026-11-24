@@ -188,6 +188,10 @@ resource changed directly in production after the gate already passed it.
 - [ ] Runtime drift and anomaly detection cover the post-deploy gap
 - [ ] Findings delivered to developers as fast, actionable feedback
 
+## Exercise
+
+Design a CI/CD pipeline for a small web service with four security gates: SAST on every pull request, dependency scanning, secrets scanning and IaC scanning before deploy. For each gate say what severity blocks the build and what only warns, and where the finding appears for developers. Add a policy-as-code rule that blocks deployment of a storage bucket that is publicly readable, and describe how you would detect configuration drift after deploy.
+
 ## What's next
 
 Module 7 scales incident response processes to match organizations

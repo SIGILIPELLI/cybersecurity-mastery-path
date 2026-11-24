@@ -202,6 +202,10 @@ secrets-manager reference versus a literal value baked into version control.
 - [ ] Secrets in a managed vault with rotation, never hardcoded
 - [ ] IaC scanned for misconfigurations before deployment
 
+## Exercise
+
+This made-up IAM policy is attached to a build server: allow `*` on `*`. Rewrite it for a job that only reads one storage bucket and writes logs to another, using least privilege (specific actions, specific resources). List three CSPM checks that would have flagged the original policy, three cloud log sources you would send to the SIEM for it, and one control that keeps a leaked access key from being useful (for example short-lived credentials).
+
 ## What's next
 
 Module 7 extends this into container and Kubernetes environments, which

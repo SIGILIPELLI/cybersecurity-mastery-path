@@ -227,6 +227,10 @@ simply cannot call the API server at all, regardless of network reachability.
 - [ ] Secrets backed by an external secrets manager for sensitive values
 - [ ] Admission control (OPA/Kyverno) enforces policy before deploy
 
+## Exercise
+
+Write a Kubernetes NetworkPolicy that denies all ingress to a namespace by default, then add one rule allowing only pods labelled `app=frontend` to reach pods labelled `app=api` on port 8080. List five Dockerfile or pod-spec changes that harden a container (for example a non-root user, a pinned base image, a read-only root filesystem, dropped capabilities, no secrets baked into the image) and say which attack each one limits. Test the policy on a local cluster you own (kind or minikube) if you have one.
+
 ## What's next
 
 Module 8 puts detection and hardening skills like these to the test

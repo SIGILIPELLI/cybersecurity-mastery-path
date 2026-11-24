@@ -165,6 +165,10 @@ rather than relying on subjective confidence.
 - [ ] Gaps become tracked action items, not just discussion points
 - [ ] Metrics tracked across exercises to show trend, not just one snapshot
 
+## Exercise
+
+Draft a one-page rules of engagement for a purple-team exercise against a lab or test environment you control: scope, forbidden actions, communication channel, stop conditions and who can call a halt. Pick three ATT&CK techniques to emulate, and for each one name the detection you expect to fire, the log source behind it and how you will record whether it did. Finish with the three questions you will ask in the purple-team debrief.
+
 ## What's next
 
 Module 9 shifts from technical exercises to the compliance frameworks

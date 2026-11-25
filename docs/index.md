@@ -32,7 +32,7 @@ never as a how-to for attacking systems you don't own.
 - Every offensive-technique module (pentesting methodology, privilege
   escalation, red team) is framed for CTF/lab practice with written
   authorization — never for attacking systems you don't control.
-- Each level ends with a project that combines everything learned in that level.
+- Levels 1–3 each end with a project that combines everything learned in that level, and Level 4 ends with the course capstone.
 - Use the search bar (top of the page) to jump straight to a topic.
 
 Start here → [Level 1 · Entry](level-1/index.md)
